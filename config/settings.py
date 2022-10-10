@@ -137,3 +137,5 @@ AUTH_USER_MODEL = "stylehub.CustomUser"
 
 django_on_heroku.settings(locals())
 del DATABASES['default']['OPTIONS']['sslmode']
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
