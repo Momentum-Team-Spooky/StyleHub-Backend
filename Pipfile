@@ -12,6 +12,7 @@ djangorestframework = "*"
 markdown = "*"
 django-filter = "*"
 django-extensions = "*"
+whitenoise = "==6.0.0"
 
 [dev-packages]
 
