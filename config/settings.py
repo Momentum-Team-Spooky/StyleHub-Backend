@@ -128,6 +128,8 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -137,5 +139,3 @@ AUTH_USER_MODEL = "stylehub.CustomUser"
 
 django_on_heroku.settings(locals())
 del DATABASES['default']['OPTIONS']['sslmode']
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
