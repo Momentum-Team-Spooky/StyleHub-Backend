@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from taggit.managers import TaggableManager
 
 # Create your models here.
 
@@ -53,7 +54,7 @@ class ClosetItem(models.Model):
     material = models.CharField(max_length=50, blank=True, null=True)
     source = models.CharField(max_length=50, blank=True, null=True)
     brand = models.CharField(max_length=50, blank=True, null=True)
-    tag = models.CharField(max_length=50, blank=True, null=True)
+    tag = TaggableManager()
     item_image = models.ImageField(
         upload_to='closet_items/', blank=True, null=True)
     added_at = models.DateField(auto_now=True)
@@ -69,7 +70,7 @@ class Outfit(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name='outfits')
     closet_item = models.ManyToManyField(ClosetItem)
     title = models.CharField(max_length=100, blank=True, null=True)
-    tag = models.CharField(max_length=50)
+    tag = TaggableManager()
     outfit_date = models.DateField(blank=True, null=True)
     outfit_image = models.ImageField(
         upload_to='outfits/', blank=True, null=True)
