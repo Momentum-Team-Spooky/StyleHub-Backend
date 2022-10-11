@@ -7,7 +7,7 @@ from .models import CustomUser, ClosetItem, Outfit
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    list_display = ["email", "username", ]
+    list_display = ["email", "username", "bio", "profile_image",]
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
