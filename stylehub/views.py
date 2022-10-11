@@ -23,3 +23,9 @@ class MyClosetList(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = self.request.user.closet_items.all()
         return queryset
+
+
+class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ClosetItem.objects.all()
+    serializer_class = ClosetItemSerializer
+    permission_classes = []
