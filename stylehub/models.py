@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from taggit.managers import TaggableManager
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
@@ -47,12 +48,40 @@ class ClosetItem(models.Model):
         )
         ),
     ]
+
+    class Colors(models.TextChoices):
+        GREEN = 'green', _('Green')
+        TURQUOISE = 'turqoise', _('Turqoise')
+        BLUE = 'blue', _('Blue')
+        PURPLE = 'purple', _('Purple')
+        RED = 'red', _('Red')
+        PINK = 'pink', _('Pink')
+        ORANGE = 'orange', _('Orange')
+        YELLOW = 'yellow', _('Yellow')
+        WHITE = 'white', _('White')
+        GREY = 'grey', _('Grey')
+        BLACK = 'black', _('Black')
+        BROWN = 'brown', _('Brown')
+        MULTI = 'multi', _('Multi')
+
+    class Source(models.TextChoices):
+        BRAND_STORE = 'brand_store', _('Brand Store')
+        DEPARTMENT_STORE = 'department_store', _('Department Store')
+        DISCOUNT_STORE = 'discount_store', _('Discount Store')
+        THRIFT_SHOP = 'thrift_shop', _('Thrift Shop')
+        RESALE_CONSIGNMENT_SHOP = 'resale/consignment_shop', _(
+            'Resale/Consignment Shop')
+        FRIEND = 'friend', _('Friend')
+        OTHER = 'other', _('Other')
+
     item_choice = models.CharField(
         max_length=50, choices=ITEM_CHOICES, blank=True, null=True)
     size = models.CharField(max_length=25, blank=True, null=True)
-    color = models.CharField(max_length=25, blank=True, null=True)
+    color = models.CharField(
+        max_length=25, choices=Colors.choices, blank=True, null=True)
     material = models.CharField(max_length=50, blank=True, null=True)
-    source = models.CharField(max_length=50, blank=True, null=True)
+    source = models.CharField(choices=Source.choices,
+                              max_length=50, blank=True, null=True)
     brand = models.CharField(max_length=50, blank=True, null=True)
     tag = TaggableManager()
     item_image = models.ImageField(
