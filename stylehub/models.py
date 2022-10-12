@@ -50,9 +50,6 @@ class ClosetItem(models.Model):
     ]
 
     class Colors(models.TextChoices):
-        BLACK = 'black', _('Black')
-        WHITE = 'white', _('White')
-        YELLOW = 'yellow', _('Yellow')
         GREEN = 'green', _('Green')
         TURQUOISE = 'turqoise', _('Turqoise')
         BLUE = 'blue', _('Blue')
@@ -60,19 +57,21 @@ class ClosetItem(models.Model):
         RED = 'red', _('Red')
         PINK = 'pink', _('Pink')
         ORANGE = 'orange', _('Orange')
-        BROWN = 'brown', _('Brown')
+        YELLOW = 'yellow', _('Yellow')
+        WHITE = 'white', _('White')
         GREY = 'grey', _('Grey')
+        BLACK = 'black', _('Black')
+        BROWN = 'brown', _('Brown')
         MULTI = 'multi', _('Multi')
 
     class Source(models.TextChoices):
+        BRAND_STORE = 'brand_store', _('Brand Store')
+        DEPARTMENT_STORE = 'department_store', _('Department Store')
+        DISCOUNT_STORE = 'discount_store', _('Discount Store')
         THRIFT_SHOP = 'thrift_shop', _('Thrift Shop')
         RESALE_CONSIGNMENT_SHOP = 'resale/consignment_shop', _(
             'Resale/Consignment Shop')
         FRIEND = 'friend', _('Friend')
-        DISCOUNT_STORE = 'discount_store', _('Discount Store')
-        DEPARTMENT_STORE = 'department_store', _('Department Store')
-        BRAND_STORE = 'brand_store', _('Brand Store')
-        PURPLE = 'purple', _('Purple')
         OTHER = 'other', _('Other')
 
     item_choice = models.CharField(
