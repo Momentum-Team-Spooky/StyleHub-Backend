@@ -17,6 +17,9 @@ django-on-heroku = "*"
 gunicorn = "*"
 pillow = "*"
 django-taggit = "*"
+boto3 = "*"
+django-storages = "*"
+python-decouple = "*"
 
 [dev-packages]
 autopep8 = "*"
