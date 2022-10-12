@@ -16,7 +16,8 @@ import django_on_heroku
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env(
-    DEBUG=(bool, False)
+    DEBUG=(bool, False),
+    USE_S3=(bool, False),
 )
 
 environ.Env.read_env()
