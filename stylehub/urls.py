@@ -1,6 +1,8 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 from stylehub import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('', views.api_root),
@@ -10,4 +12,4 @@ urlpatterns = [
     path('outfit/<int:pk>/', views.OutfitDetail.as_view(), name='outfit-detail'),
     path('myprofile/', views.UserProfile.as_view(), name='my-profile'),
     path('profile/<int:pk>/', views.UserDetail.as_view(), name='profile-detail'),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

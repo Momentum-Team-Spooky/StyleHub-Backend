@@ -9,6 +9,7 @@ class ClosetItemSerializer(TaggitSerializer, serializers.ModelSerializer):
     tag = TagListSerializerField()
     user = serializers.SlugRelatedField(slug_field="username", read_only=True)
     user_id = serializers.SerializerMethodField()
+    item_image = serializers.ImageField()
 
     class Meta:
         model = ClosetItem
@@ -17,6 +18,16 @@ class ClosetItemSerializer(TaggitSerializer, serializers.ModelSerializer):
 
     def get_user_id(self, obj):
         return obj.user.id
+
+    def update(self, instance, validated_data):
+    
+      if "file" in self.initial_data:
+            file = self.initial_data.get("file")
+            instance.item_image.save(file.name, file, save=True)
+            return instance
+      # this call to super is to make sure that update still works for other fields
+      return super().update(instance, validated_data)
+
 
 
 class OutfitSerializer(TaggitSerializer, serializers.ModelSerializer):

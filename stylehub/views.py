@@ -5,6 +5,7 @@ from .serializers import ClosetItemSerializer, OutfitSerializer, UserSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from rest_framework.parsers import JSONParser, FileUploadParser
 
 # Create your views here.
 
@@ -30,6 +31,14 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ClosetItem.objects.all()
     serializer_class = ClosetItemSerializer
     permission_classes = []
+    parser_classes = [JSONParser, FileUploadParser]
+
+    def get_parsers(self):
+        if self.request.FILES:
+            self.parser_classes.append(FileUploadParser)
+        return [parser() for parser in self.parser_classes]
+    
+    
 
 
 class MyOutfitList(generics.ListCreateAPIView):
