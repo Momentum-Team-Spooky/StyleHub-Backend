@@ -20,6 +20,7 @@ django-taggit = "*"
 boto3 = "*"
 django-storages = "*"
 python-decouple = "*"
+djoser = "*"
 
 [dev-packages]
 autopep8 = "*"
