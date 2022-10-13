@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import environ
 from pathlib import Path
 import django_on_heroku
+from corsheaders.defaults import default_headers
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -124,6 +126,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'content-disposition',
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -150,6 +155,8 @@ if env('USE_S3'):
     AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
 
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+
+    AWS_DEFAULT_ACL = 'public-read'
 
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
