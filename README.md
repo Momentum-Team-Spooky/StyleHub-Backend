@@ -17,13 +17,13 @@ Backend Repository for StyleHub Project
 | GET    | outfit/:id/      | -           | data for item with specified id              |                                      |
 | PATCH  | outfit/:id/      | card data   | update item                                  | updates the outfit with specified id |
 | DELETE | outfit/:id/      | -           | -                                            | deletes outfit with specified id     |
+| GET    | myprofile/       | -           | profile for logged in user                   | not ready                            |
+| POST   | myprofile/       | profile     | input profile data informations              |                                      |
+| PATCH  | myprofile/       | -           | edit profile                                 |                                      |
+| GET    | profile/id/      |             | profile of another user                      |                                      |
 
 --- ^^^ ACTIVE above ^^^ --- IN PROCESS below ---
 
-| GET | myprofile/ | - | profile for logged in user | not ready |
-| POST | myprofile/ | profile | input profile data informations | |
-| PATCH | myprofile/ | - | edit profile | |
-| GET | profile/id/ | | profile of another user | |
 | GET | users/ | - | list of all users information | Admin/superuser only |
 | GET | closet-items/ | - | list of all closet-items | Admin/superuser only |
 | GET | outfits/ | - | list of all outfits | Admin/superuser only |

@@ -7,9 +7,14 @@ from django.utils.translation import gettext_lazy as _
 
 
 class CustomUser(AbstractUser):
-    bio = models.TextField(max_length=1000, null=True, blank=True)
+    bio = models.TextField(
+        max_length=1000,
+        null=True,
+        blank=True)
     profile_image = models.ImageField(
-        upload_to='profile_images/', blank=True, null=True)
+        upload_to='profile_images/',
+        blank=True,
+        null=True)
 
     def __str__(self):
         return self.username
@@ -75,20 +80,42 @@ class ClosetItem(models.Model):
         OTHER = 'other', _('Other')
 
     item_choice = models.CharField(
-        max_length=50, choices=ITEM_CHOICES, blank=True, null=True)
-    size = models.CharField(max_length=25, blank=True, null=True)
+        max_length=50,
+        choices=ITEM_CHOICES,
+        blank=True,
+        null=True)
+    size = models.CharField(
+        max_length=25,
+        blank=True,
+        null=True)
     color = models.CharField(
-        max_length=25, choices=Colors.choices, blank=True, null=True)
-    material = models.CharField(max_length=50, blank=True, null=True)
-    source = models.CharField(choices=Source.choices,
-                              max_length=50, blank=True, null=True)
-    brand = models.CharField(max_length=50, blank=True, null=True)
+        max_length=25,
+        choices=Colors.choices,
+        blank=True,
+        null=True)
+    material = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True)
+    source = models.CharField(
+        choices=Source.choices,
+        max_length=50,
+        blank=True,
+        null=True)
+    brand = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True)
     tag = TaggableManager()
     item_image = models.ImageField(
-        upload_to='closet_items/', blank=True, null=True)
-    added_at = models.DateField(auto_now=True)
-    user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name='closet_items')
+        upload_to='closet_items/',
+        blank=True,
+        null=True)
+    added_at = models.DateField(
+        auto_now=True)
+    user = models.ForeignKey(CustomUser,
+                             on_delete=models.CASCADE,
+                             related_name='closet_items')
 
     def __str__(self):
         return f'{self.item_choice} in {self.color} by {self.brand}'
@@ -96,16 +123,28 @@ class ClosetItem(models.Model):
 
 class Outfit(models.Model):
     user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name='outfits')
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='outfits')
     closet_item = models.ManyToManyField(
-        ClosetItem, related_name='outfits')
-    title = models.CharField(max_length=100, blank=True, null=True)
+        ClosetItem,
+        related_name='outfits')
+    title = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True)
     tag = TaggableManager()
-    outfit_date = models.DateField(blank=True, null=True)
+    outfit_date = models.DateField(
+        blank=True,
+        null=True)
     outfit_image = models.ImageField(
-        upload_to='outfits/', blank=True, null=True)
-    draft = models.BooleanField(default=True)
-    favorite = models.BooleanField(default=False)
+        upload_to='outfits/',
+        blank=True,
+        null=True)
+    draft = models.BooleanField(
+        default=True)
+    favorite = models.BooleanField(
+        default=False)
 
     def __str__(self):
         return f'{self.title} created by {self.user}'
