@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_list_or_404
 from rest_framework import generics, status
 from .models import CustomUser, ClosetItem, Outfit
-from .serializers import ClosetItemSerializer, OutfitSerializer
+from .serializers import ClosetItemSerializer, OutfitSerializer, UserSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -44,4 +44,19 @@ class MyOutfitList(generics.ListCreateAPIView):
 class OutfitDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Outfit.objects.all()
     serializer_class = OutfitSerializer
+    permission_classes = []
+
+
+class UserProfile(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = []
+
+    def get_object(self):
+        return self.request.user
+
+
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
     permission_classes = []

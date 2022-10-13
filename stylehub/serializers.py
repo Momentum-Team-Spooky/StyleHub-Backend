@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ClosetItem, Outfit
+from .models import ClosetItem, Outfit, CustomUser
 from rest_framework.serializers import ListSerializer
 from taggit.serializers import (TagListSerializerField,
                                 TaggitSerializer)
@@ -26,3 +26,10 @@ class OutfitSerializer(TaggitSerializer, serializers.ModelSerializer):
     class Meta:
         model = Outfit
         fields = "__all__"
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'username', 'bio', 'profile_image')
