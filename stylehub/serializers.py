@@ -15,6 +15,7 @@ class ClosetItemSerializer(TaggitSerializer, serializers.ModelSerializer):
         model = ClosetItem
         fields = ('id', 'item_choice', 'size', 'color', 'material', 'brand', 'source', 'tag', 'item_image', 'added_at', 'user_id', 'user'
                   )
+        read_only_fields = ['item_image']
 
     def get_user_id(self, obj):
         return obj.user.id
@@ -37,6 +38,7 @@ class OutfitSerializer(TaggitSerializer, serializers.ModelSerializer):
     class Meta:
         model = Outfit
         fields = "__all__"
+        read_only_field = ["outfit_image"]
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -44,3 +46,4 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('id', 'username', 'bio', 'profile_image')
+        read_only_field = ["profile_image"]
