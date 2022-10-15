@@ -26,6 +26,12 @@ class GenericStringTaggedClosetItem(CommonGenericTaggedItemBase, TaggedItemBase)
 class GenericStringTaggedOutfit(CommonGenericTaggedItemBase, TaggedItemBase):
     object_id = models.CharField(max_length=50, verbose_name=_('Object id'), db_index=True)
 
+class TaggedClosetItem(TaggedItemBase):
+       closet_items = models.ForeignKey('ClosetItem', on_delete=models.CASCADE)
+
+class TaggedOutfit(TaggedItemBase):
+       closet_items = models.ForeignKey('Outfit', on_delete=models.CASCADE)
+
 class ClosetItem(models.Model):
     ITEM_CHOICES = [
         ('Top', (
