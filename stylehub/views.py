@@ -37,8 +37,6 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
         if self.request.FILES:
             self.parser_classes.append(FileUploadParser)
         return [parser() for parser in self.parser_classes]
-    
-    
 
 
 class MyOutfitList(generics.ListCreateAPIView):
@@ -69,3 +67,8 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = []
+
+
+class FavoriteOutfitsList(generics.ListAPIView):
+    queryset = Outfit.objects.filter(favorite=True)
+    serializer_class = OutfitSerializer
