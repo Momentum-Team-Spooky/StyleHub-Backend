@@ -147,8 +147,19 @@ class Outfit(models.Model):
         null=True)
     draft = models.BooleanField(
         default=True)
-    favorite = models.BooleanField(
-        default=False)
 
     def __str__(self):
         return f'{self.title} created by {self.user}'
+
+class Favorite(models.Model):
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name="favorites", null=True)
+    outfit = models.ForeignKey(
+        Outfit, on_delete=models.CASCADE, related_name="favorites")
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', ''], name='unique_for_question_and_user'
+            )
+        ]

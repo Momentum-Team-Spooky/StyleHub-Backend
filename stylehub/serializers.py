@@ -44,3 +44,12 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('id', 'username', 'bio', 'profile_image')
+
+class FavoriteSerializer(serializers.ModelSerializer):
+    user = serializers.SlugRelatedField(slug_field='username', read_only=True)
+    title = serializers.SlugRelatedField(
+        source="outfit", slug_field='title', read_only=True)
+
+    class Meta:
+        model = Outfit
+        fields = "__all__"

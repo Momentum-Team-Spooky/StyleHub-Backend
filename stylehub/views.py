@@ -1,7 +1,8 @@
+from django.db import IntegrityError
 from django.shortcuts import render, get_list_or_404
-from rest_framework import generics, status
-from .models import CustomUser, ClosetItem, Outfit
-from .serializers import ClosetItemSerializer, OutfitSerializer, UserSerializer
+from rest_framework import generics, status, filters, serializers
+from .models import CustomUser, ClosetItem, Outfit, Favorite
+from .serializers import ClosetItemSerializer, OutfitSerializer, UserSerializer, FavoriteSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -69,3 +70,22 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = []
+
+class FavoriteOutfitList(generics.ListCreateAPIView):
+    queryset = Favorite.objects.all()
+    serializer_class = FavoriteSerializer
+    permission_classes = []
+
+    def perform_create(self, serializer):
+        try:
+            serializer.save(user=self.request.user,
+                            outfit=serializer.validated_data.get('outfit'))
+        except IntegrityError as error:
+            raise serializers.ValidationError({"error": error})
+
+
+class FavoriteOutfitDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Favorite.objects.all()
+    serializer_class = FavoriteSerializer
+    permission_classes = []
+
