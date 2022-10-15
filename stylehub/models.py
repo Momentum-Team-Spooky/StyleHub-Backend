@@ -2,7 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from taggit.managers import TaggableManager
 from django.utils.translation import gettext_lazy as _
-
+from taggit.managers import TaggableManager
+from taggit.models import CommonGenericTaggedItemBase, TaggedItemBase
 # Create your models here.
 
 
@@ -19,6 +20,11 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
+class GenericStringTaggedClosetItem(CommonGenericTaggedItemBase, TaggedItemBase):
+    object_id = models.CharField(max_length=50, verbose_name=_('Object id'), db_index=True)
+
+class GenericStringTaggedOutfit(CommonGenericTaggedItemBase, TaggedItemBase):
+    object_id = models.CharField(max_length=50, verbose_name=_('Object id'), db_index=True)
 
 class ClosetItem(models.Model):
     ITEM_CHOICES = [
@@ -78,6 +84,8 @@ class ClosetItem(models.Model):
             'Resale/Consignment Shop')
         FRIEND = 'friend', _('Friend')
         OTHER = 'other', _('Other')
+    
+    closet_item_id = models.CharField(max_length=50, default="None", primary_key=True)
 
     item_choice = models.CharField(
         max_length=50,
@@ -106,7 +114,7 @@ class ClosetItem(models.Model):
         max_length=50,
         blank=True,
         null=True)
-    tag = TaggableManager()
+    tag = TaggableManager(through=GenericStringTaggedClosetItem)
     item_image = models.ImageField(
         upload_to='closet_items/',
         blank=True,
@@ -126,6 +134,7 @@ class Outfit(models.Model):
         CustomUser,
         on_delete=models.CASCADE,
         related_name='outfits')
+    outfit_id = models.CharField(max_length=50, default="None", primary_key=True)
     closet_item = models.ManyToManyField(
         ClosetItem,
         related_name='outfits')
@@ -133,7 +142,7 @@ class Outfit(models.Model):
         max_length=100,
         blank=True,
         null=True)
-    tag = TaggableManager()
+    tag = TaggableManager(through=GenericStringTaggedOutfit)
     outfit_date = models.DateField(
         blank=True,
         null=True)

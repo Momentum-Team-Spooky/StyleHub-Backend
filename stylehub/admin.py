@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import CustomUser, ClosetItem, Outfit
+from .models import CustomUser, ClosetItem, Outfit, GenericStringTaggedOutfit, GenericStringTaggedClosetItem
 # Register your models here.
 
 

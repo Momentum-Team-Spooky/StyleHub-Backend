@@ -1,15 +1,16 @@
 from rest_framework import serializers
-from .models import ClosetItem, Outfit, CustomUser
+from .models import ClosetItem, Outfit, CustomUser, GenericStringTaggedClosetItem, GenericStringTaggedOutfit
 from rest_framework.serializers import ListSerializer
 from taggit.serializers import (TagListSerializerField,
                                 TaggitSerializer)
+
 
 
 class ClosetItemSerializer(TaggitSerializer, serializers.ModelSerializer):
     tag = TagListSerializerField()
     user = serializers.SlugRelatedField(slug_field="username", read_only=True)
     user_id = serializers.SerializerMethodField()
-    item_image = serializers.ImageField()
+    item_image = serializers.ImageField(read_only=True)
 
     class Meta:
         model = ClosetItem
@@ -34,6 +35,7 @@ class ClosetItemSerializer(TaggitSerializer, serializers.ModelSerializer):
 class OutfitSerializer(TaggitSerializer, serializers.ModelSerializer):
     tag = TagListSerializerField
     closet_item = ClosetItemSerializer(many=True, read_only=True)
+    outfit_image = serializers.ImageField(read_only=True)
 
     class Meta:
         model = Outfit
@@ -42,6 +44,7 @@ class OutfitSerializer(TaggitSerializer, serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    profile_image = serializers.ImageField(read_only=True)
 
     class Meta:
         model = CustomUser

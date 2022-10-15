@@ -126,6 +126,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+TAGGIT_CASE_INSENSITIVE = True
+
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'content-disposition',
 ]
