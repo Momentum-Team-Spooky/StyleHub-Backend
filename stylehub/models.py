@@ -160,6 +160,6 @@ class Favorite(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['user', ''], name='unique_for_question_and_user'
+                fields=['user', 'outfit'], name='unique_for_outfit_and_user'
             )
         ]
