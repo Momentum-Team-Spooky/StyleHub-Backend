@@ -12,4 +12,6 @@ urlpatterns = [
     path('outfit/<int:pk>/', views.OutfitDetail.as_view(), name='outfit-detail'),
     path('myprofile/', views.UserProfile.as_view(), name='my-profile'),
     path('profile/<int:pk>/', views.UserDetail.as_view(), name='profile-detail'),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('outfits/favorite/', views.FavoriteOutfitsList.as_view(),
+         name='favorite-outfits'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
