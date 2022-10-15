@@ -126,6 +126,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'content-disposition',
 ]
