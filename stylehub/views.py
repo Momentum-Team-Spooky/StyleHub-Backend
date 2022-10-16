@@ -22,6 +22,9 @@ class MyClosetList(generics.ListCreateAPIView):
     serializer_class = ClosetItemSerializer
     permission_classes = []
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
     def get_queryset(self):
         queryset = self.request.user.closet_items.all()
         return queryset
@@ -42,6 +45,9 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
 class MyOutfitList(generics.ListCreateAPIView):
     serializer_class = OutfitSerializer
     permission_classes = []
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
     def get_queryset(self):
         queryset = self.request.user.outfits.all()
