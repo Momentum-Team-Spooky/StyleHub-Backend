@@ -72,3 +72,7 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 class FavoriteOutfitsList(generics.ListAPIView):
     queryset = Outfit.objects.filter(favorite=True)
     serializer_class = OutfitSerializer
+
+    def get_queryset(self):
+        queryset = self.request.user.outfits.filter(favorite=True)
+        return queryset
