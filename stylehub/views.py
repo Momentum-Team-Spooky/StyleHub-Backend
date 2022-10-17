@@ -6,7 +6,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.parsers import JSONParser, FileUploadParser
-
+from rest_framework.permissions import DjangoObjectPermissions
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from .permissions import IsOwningUser 
 # Create your views here.
 
 
@@ -20,7 +22,7 @@ def api_root(request, format=None):
 
 class MyClosetList(generics.ListCreateAPIView):
     serializer_class = ClosetItemSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated, IsOwningUser]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -30,11 +32,13 @@ class MyClosetList(generics.ListCreateAPIView):
         return queryset
 
 
+
 class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ClosetItem.objects.all()
     serializer_class = ClosetItemSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated, IsOwningUser]
     parser_classes = [JSONParser, FileUploadParser]
+
 
     def get_parsers(self):
         if self.request.FILES:
@@ -44,7 +48,7 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class MyOutfitList(generics.ListCreateAPIView):
     serializer_class = OutfitSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated,IsOwningUser]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -57,28 +61,27 @@ class MyOutfitList(generics.ListCreateAPIView):
 class OutfitDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Outfit.objects.all()
     serializer_class = OutfitSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated,IsOwningUser]
 
 
 class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated,IsOwningUser]
 
     def get_object(self):
         return self.request.user
 
 
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = []
+
 
 
 class FavoriteOutfitsList(generics.ListAPIView):
     queryset = Outfit.objects.filter(favorite=True)
     serializer_class = OutfitSerializer
+    permission_classes = [IsAuthenticated,IsOwningUser]
 
     def get_queryset(self):
         queryset = self.request.user.outfits.filter(favorite=True)
         return queryset
+

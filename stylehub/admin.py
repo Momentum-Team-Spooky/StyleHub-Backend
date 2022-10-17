@@ -10,6 +10,7 @@ class CustomUserAdmin(UserAdmin):
     list_display = ["email", "username", "bio", "profile_image",]
 
 
+
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(ClosetItem)
 admin.site.register(Outfit)
