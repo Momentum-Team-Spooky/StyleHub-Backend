@@ -73,7 +73,10 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
         return self.request.user
 
 
-
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAdminUser]
 
 
 class FavoriteOutfitsList(generics.ListAPIView):
