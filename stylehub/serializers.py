@@ -3,6 +3,8 @@ from .models import ClosetItem, Outfit, CustomUser
 from rest_framework.serializers import ListSerializer
 from taggit.serializers import (TagListSerializerField,
                                 TaggitSerializer)
+from django.db.models import Count
+from rest_framework.response import Response
 
 
 class ClosetItemSerializer(TaggitSerializer, serializers.ModelSerializer):
@@ -31,7 +33,7 @@ class ClosetItemSerializer(TaggitSerializer, serializers.ModelSerializer):
 
 class OutfitSerializer(TaggitSerializer, serializers.ModelSerializer):
     tag = TagListSerializerField
-    closet_item = ClosetItemSerializer(many=True, read_only=True)
+    # closet_item = ClosetItemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Outfit
@@ -43,3 +45,25 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('id', 'username', 'bio', 'profile_image')
+
+
+# class ClosetCompSerializer(TaggitSerializer, serializers.ModelSerializer):
+#     tag = TagListSerializerField()
+
+#     class Meta:
+#         model = ClosetItem
+#         fields = ('category', 'subcategory', 'color', 'brand', 'source', 'tag')
+
+#     @property
+#     def get_color(self, request, format=None):
+#         total_count = ClosetItem.objects.count()
+#         composition = {}
+
+#         source_qs = ClosetItem.objects.values(
+#             'source').annotate(Count('source')).order_by('-source__count')
+
+#         for sources in source_qs:
+#             percent = sources['source__count'] / total_count * 100
+#             sources['percent'] = percent
+#         composition['source'] = source_qs
+#         return Response(composition)

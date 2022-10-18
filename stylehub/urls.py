@@ -14,4 +14,12 @@ urlpatterns = [
     path('profile/<int:pk>/', views.UserDetail.as_view(), name='profile-detail'),
     path('outfits/favorite/', views.FavoriteOutfitsList.as_view(),
          name='favorite-outfits'),
+    path('color-composition/', views.ColorComposition.as_view(),
+         name='color-composition'),
+    path('source-composition/', views.SourceComposition.as_view(),
+         name='source-composition'),
+    path('brand-composition/', views.BrandComposition.as_view(),
+         name='brand-composition'),
+    # path('tag-composition/', views.TagComposition.as_view(),
+    #      name='tag-composition'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
