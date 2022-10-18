@@ -13,7 +13,6 @@ from .permissions import IsOwningUser
 from rest_framework import filters
 from django.shortcuts import get_object_or_404
 from django.db.models import Count, F, FloatField
-from django.db.models.functions import Cast
 
 # Create your views here.
 
@@ -101,7 +100,7 @@ class ClosetComposition(APIView):
         results = (
             ClosetItem.objects.values("color")
             .annotate(colors=Count("color"))
-            .annotate(percentage=Cast(F("colors") * 100.0 / total_count, FloatField()))
+            .annotate(percentage=(F("colors") * 100.0 / total_count))
         )
         return results
 
