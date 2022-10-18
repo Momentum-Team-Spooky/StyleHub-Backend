@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_list_or_404
 from rest_framework import generics, status
+from rest_framework.views import APIView
 from .models import CustomUser, ClosetItem, Outfit
 from .serializers import ClosetItemSerializer, OutfitSerializer, UserSerializer
 from rest_framework.decorators import api_view
@@ -11,15 +12,19 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from .permissions import IsOwningUser
 from rest_framework import filters
 from django.shortcuts import get_object_or_404
+from django.db.models import Count
+
 # Create your views here.
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def api_root(request, format=None):
-    return Response({
-        'mycloset/': reverse('my-closet-items', request=request, format=format),
-        'myoutfits/': reverse('my-outfits', request=request, format=format),
-    })
+    return Response(
+        {
+            "mycloset/": reverse("my-closet-items", request=request, format=format),
+            "myoutfits/": reverse("my-outfits", request=request, format=format),
+        }
+    )
 
 
 class MyClosetList(generics.ListCreateAPIView):
@@ -87,3 +92,16 @@ class FavoriteOutfitsList(generics.ListAPIView):
     def get_queryset(self):
         queryset = self.request.user.outfits.filter(favorite=True)
         return queryset
+
+
+class ClosetComposition(APIView):
+    def get(self, request, format=None):
+        total_count = ClosetItem.objects.count()
+        color_qs = ClosetItem.objects.values("color").annotate(Count("color"))
+        composition = {}
+
+        for colors in color_qs:
+            percent = colors["color__count"] / total_count * 100
+            colors["percent"] = percent
+        composition["colors"] = color_qs
+        return Response(composition)
