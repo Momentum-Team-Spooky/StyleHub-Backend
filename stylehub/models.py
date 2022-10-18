@@ -21,52 +21,46 @@ class CustomUser(AbstractUser):
 
 
 class ClosetItem(models.Model):
-    ITEM_CHOICES = [
-        ('Top', (
-            ('button-down', 'Button-down'),
-            ('dress', 'Dress'),
-            ('shirt', 'Shirt'),
-            ('sweater', 'Sweater'),
-            ('t-shirt', 'T-shirt'),
-        )
-        ),
-        ('Bottom', (
-            ('pants', 'Pants'),
-            ('shorts', 'Shorts'),
-            ('skirt', 'Skirt'),
-        )
-        ),
-        ('Outwear', (
-            ('cardigan', 'Cardigan'),
-            ('coat', 'Coat'),
-            ('jacket', 'Jacket'),
-            ('vest', 'Vest'),
-        )
-        ),
-        ('Shoes', (
-            ('boots', 'Boots'),
-            ('flats', 'Flats'),
-            ('heels', 'Heels'),
-            ('sandals', 'Sandals'),
-            ('slippers', 'Slippers'),
-            ('sneakers', 'Sneakers'),
-        )
-        ),
-    ]
+
+    class Category(models.TextChoices):
+        TOP = 'top', _('Top')
+        BOTTOM = 'bottom', _('Bottom')
+        OUTERWEAR = 'outerwear', _('Outerwear')
+        SHOES = 'shoes', _('Shoes')
+
+    class SubCategory(models.TextChoices):
+        BUTTON_DOWN = 'button-down', _('Button-down')
+        DRESS = 'dress', _('Dress')
+        SHIRT = 'shirt', _('Shirt')
+        SWEATER = 'sweater', _('Sweater')
+        T_SHIRT = 't-shirt', _('T-shirt')
+        PANTS = 'pants', _('Pants')
+        SHORTS = 'shorts', _('Shorts')
+        SKIRT = 'skirt', _('Skirt')
+        CARDIGAN = 'cardigan', _('Cardigan')
+        COAT = 'coat', _('Coat')
+        JACKET = 'jacket', _('Jacket')
+        VEST = 'vest', _('Vest')
+        BOOTS = 'boots', _('Boots')
+        FLATS = 'flats', _('Flats')
+        HEELS = 'heels', _('Heels')
+        SANDALS = 'sandals', _('Sandals')
+        SLIPPERS = 'slippers', _('Slippers')
+        SNEAKERS = 'sneakers', _('Sneakers')
 
     class Colors(models.TextChoices):
+        WHITE = 'white', _('White')
         GREEN = 'green', _('Green')
-        TURQUOISE = 'turqoise', _('Turqoise')
-        BLUE = 'blue', _('Blue')
-        PURPLE = 'purple', _('Purple')
+        YELLOW = 'yellow', _('Yellow')
+        ORANGE = 'orange', _('Orange')
         RED = 'red', _('Red')
         PINK = 'pink', _('Pink')
-        ORANGE = 'orange', _('Orange')
-        YELLOW = 'yellow', _('Yellow')
-        WHITE = 'white', _('White')
-        GREY = 'grey', _('Grey')
-        BLACK = 'black', _('Black')
+        PURPLE = 'purple', _('Purple')
+        TURQUOISE = 'turqoise', _('Turqoise')
+        BLUE = 'blue', _('Blue')
         BROWN = 'brown', _('Brown')
+        BLACK = 'black', _('Black')
+        GREY = 'grey', _('Grey')
         MULTI = 'multi', _('Multi')
 
     class Source(models.TextChoices):
@@ -79,10 +73,13 @@ class ClosetItem(models.Model):
         FRIEND = 'friend', _('Friend')
         OTHER = 'other', _('Other')
 
-    item_choice = models.CharField(
+    category = models.CharField(
         max_length=50,
-        choices=ITEM_CHOICES,
-        blank=True,
+        choices=Category.choices,
+        null=True)
+    subcategory = models.CharField(
+        max_length=50,
+        choices=SubCategory.choices,
         null=True)
     size = models.CharField(
         max_length=25,
@@ -92,7 +89,6 @@ class ClosetItem(models.Model):
     color = models.CharField(
         max_length=25,
         choices=Colors.choices,
-        blank=True,
         null=True)
     material = models.CharField(
         max_length=50,
@@ -110,7 +106,7 @@ class ClosetItem(models.Model):
         blank=True,
         null=True,
         default="unknown")
-    tag = TaggableManager()
+    tag = TaggableManager(blank=True)
     item_image = models.ImageField(
         upload_to='closet_items/',
         blank=True,
@@ -122,7 +118,7 @@ class ClosetItem(models.Model):
                              related_name='closet_items')
 
     def __str__(self):
-        return f'{self.item_choice} in {self.color} by {self.brand}'
+        return f'{self.subcategory} in {self.color} by {self.brand}'
 
 
 class Outfit(models.Model):
@@ -137,7 +133,7 @@ class Outfit(models.Model):
         max_length=100,
         blank=True,
         null=True)
-    tag = TaggableManager()
+    tag = TaggableManager(blank=True)
     outfit_date = models.DateField(
         blank=True,
         null=True)
