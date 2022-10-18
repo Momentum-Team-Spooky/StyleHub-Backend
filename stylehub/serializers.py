@@ -13,21 +13,20 @@ class ClosetItemSerializer(TaggitSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = ClosetItem
-        fields = ('id', 'item_choice', 'size', 'color', 'material', 'brand', 'source', 'tag', 'item_image', 'added_at', 'user_id', 'user'
-                  )
+        fields = ('id', 'category', 'subcategory', 'size', 'color', 'material',
+                  'brand', 'source', 'tag', 'item_image', 'added_at', 'user_id', 'user')
 
     def get_user_id(self, obj):
         return obj.user.id
 
     def update(self, instance, validated_data):
-    
-      if "file" in self.initial_data:
+
+        if "file" in self.initial_data:
             file = self.initial_data.get("file")
             instance.item_image.save(file.name, file, save=True)
             return instance
-      # this call to super is to make sure that update still works for other fields
-      return super().update(instance, validated_data)
-
+        # this call to super is to make sure that update still works for other fields
+        return super().update(instance, validated_data)
 
 
 class OutfitSerializer(TaggitSerializer, serializers.ModelSerializer):
