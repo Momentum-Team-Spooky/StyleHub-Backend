@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'taggit',
     'storages',
+    'imagekit',
 ]
 
 MIDDLEWARE = [

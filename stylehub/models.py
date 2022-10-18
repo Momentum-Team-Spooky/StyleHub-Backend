@@ -2,7 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from taggit.managers import TaggableManager
 from django.utils.translation import gettext_lazy as _
-
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 # Create your models here.
 
 
@@ -111,10 +112,10 @@ class ClosetItem(models.Model):
         null=True,
         default="unknown")
     tag = TaggableManager()
-    item_image = models.ImageField(
-        upload_to='closet_items/',
-        blank=True,
-        null=True)
+    item_image_thumbnail = ProcessedImageField(upload_to='closet_items/',
+                                           processors=[ResizeToFill(200, 200)],
+                                           format='JPEG',
+                                           options={'quality': 200}, blank=True, null=True)
     added_at = models.DateField(
         auto_now=True)
     user = models.ForeignKey(CustomUser,

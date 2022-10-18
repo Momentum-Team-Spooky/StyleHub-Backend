@@ -9,7 +9,8 @@ class ClosetItemSerializer(TaggitSerializer, serializers.ModelSerializer):
     tag = TagListSerializerField()
     user = serializers.SlugRelatedField(slug_field="username", read_only=True)
     user_id = serializers.SerializerMethodField()
-    item_image = serializers.ImageField()
+    item_image = serializers.ImageField(read_only=True)
+
 
     class Meta:
         model = ClosetItem
