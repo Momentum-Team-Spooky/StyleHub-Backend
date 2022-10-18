@@ -12,7 +12,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from .permissions import IsOwningUser
 from rest_framework import filters
 from django.shortcuts import get_object_or_404
-from django.db.models import Count
+from django.db.models import Count, F, FloatField
+from django.db.models.functions import Cast
 
 # Create your views here.
 
@@ -95,13 +96,15 @@ class FavoriteOutfitsList(generics.ListAPIView):
 
 
 class ClosetComposition(APIView):
-    def get(self, request, format=None):
+    def calculate_composition(self):
         total_count = ClosetItem.objects.count()
-        color_qs = ClosetItem.objects.values("color").annotate(Count("color"))
-        composition = {}
+        results = (
+            ClosetItem.objects.values("color")
+            .annotate(colors=Count("color"))
+            .annotate(percentage=Cast(F("colors") * 100.0 / total_count, FloatField()))
+        )
+        return results
 
-        for colors in color_qs:
-            percent = colors["color__count"] / total_count * 100
-            colors["percent"] = percent
-        composition["colors"] = color_qs
+    def get(self, request, format=None):
+        composition = self.calculate_composition()
         return Response(composition)
