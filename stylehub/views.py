@@ -11,6 +11,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from .permissions import IsOwningUser
 from rest_framework import filters
 from django.shortcuts import get_object_or_404
+from django.db.models import Count
 # Create your views here.
 
 
@@ -87,3 +88,70 @@ class FavoriteOutfitsList(generics.ListAPIView):
     def get_queryset(self):
         queryset = self.request.user.outfits.filter(favorite=True)
         return queryset
+
+
+class ColorComposition(generics.ListAPIView):
+
+    def get(self, request, format=None):
+        total_count = ClosetItem.objects.count()
+        color_qs = ClosetItem.objects.values('color').annotate(
+            Count('color')).order_by('-color__count')[:10]
+
+        composition = {}
+
+        for colors in color_qs:
+            percent = colors['color__count'] / total_count * 100
+            colors['percent'] = percent
+        composition['colors'] = color_qs
+        return Response(composition)
+
+
+class SourceComposition(generics.ListAPIView):
+
+    def get(self, request, format=None):
+        total_count = ClosetItem.objects.count()
+        composition = {}
+
+        source_qs = ClosetItem.objects.values(
+            'source').annotate(Count('source')).order_by('-source__count')
+
+        for sources in source_qs:
+            percent = sources['source__count'] / total_count * 100
+            sources['percent'] = percent
+        composition['source'] = source_qs
+        return Response(composition)
+
+
+class BrandComposition(generics.ListAPIView):
+
+    def get(self, request, format=None):
+        total_count = ClosetItem.objects.count()
+        composition = {}
+
+        brand_qs = ClosetItem.objects.values(
+            'brand').annotate(Count('brand')).order_by('-brand__count')
+
+        for brands in brand_qs:
+            percent = brands['brand__count'] / total_count * 100
+            brands['percent'] = percent
+        composition['brand'] = brand_qs
+        return Response(composition)
+
+
+# class TagComposition(generics.ListAPIView):
+
+#     def get(self, request, format=None):
+#         total_count = ClosetItem.objects.count()
+#         composition = {}
+
+#         tag_qs = ClosetItem.objects.values(
+#             'tag').annotate(Count('tag')).order_by('-tag_count')
+
+#         for tags in tag_qs:
+#             percent = tags['tag__count'] / total_count * 100
+#             tags['percent'] = percent
+#         composition['tag'] = tag_qs
+#         return Response(composition)
+
+        # category_qs = ClosetItem.objects.values(
+        #     'category').annotate(Count('category')).order_by('-category__count')[:10]
