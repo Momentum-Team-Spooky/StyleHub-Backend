@@ -78,7 +78,6 @@ class ClosetCompositionSerializer(serializers.Serializer):
         return self.TOTAL_ITEM_COUNT
 
     def calculate_composition(self, field):
-        # total_count = ClosetItem.objects.count()
         results = (
             ClosetItem.objects.values(field)
             .annotate(item_count=Count(field))
