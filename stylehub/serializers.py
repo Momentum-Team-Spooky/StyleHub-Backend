@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from .models import ClosetItem, Outfit, CustomUser
 from rest_framework.serializers import ListSerializer
-from taggit.serializers import (TagListSerializerField,
-                                TaggitSerializer)
+from taggit.serializers import TagListSerializerField, TaggitSerializer
 from django.db.models import Count
 from rest_framework.response import Response
+from django.db.models import Count, F, FloatField
 
 
 class ClosetItemSerializer(TaggitSerializer, serializers.ModelSerializer):
@@ -33,7 +33,7 @@ class ClosetItemSerializer(TaggitSerializer, serializers.ModelSerializer):
 
 class OutfitSerializer(TaggitSerializer, serializers.ModelSerializer):
     tag = TagListSerializerField
-    # closet_item = ClosetItemSerializer(many=True, read_only=True)
+    closet_item = ClosetItemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Outfit
@@ -47,23 +47,31 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'bio', 'profile_image')
 
 
-# class ClosetCompSerializer(TaggitSerializer, serializers.ModelSerializer):
-#     tag = TagListSerializerField()
+class ClosetCompositionSerializer(serializers.Serializer):
+    color_percentages = serializers.SerializerMethodField()
+    brand_percentages = serializers.SerializerMethodField()
+    total_closet_items = serializers.SerializerMethodField()
+    TOTAL_ITEM_COUNT = ClosetItem.objects.count()
 
-#     class Meta:
-#         model = ClosetItem
-#         fields = ('category', 'subcategory', 'color', 'brand', 'source', 'tag')
+    class Meta:
+        fields = (
+            'total_closet_items',
+            'color_percentages',
+            'brand_percentages',
+        )
 
-#     @property
-#     def get_color(self, request, format=None):
-#         total_count = ClosetItem.objects.count()
-#         composition = {}
+    def get_total_closet_items(self, obj):
+        return self.TOTAL_ITEM_COUNT
 
-#         source_qs = ClosetItem.objects.values(
-#             'source').annotate(Count('source')).order_by('-source__count')
+    def calculate_composition(self, field):
+        results = (
+            ClosetItem.objects.values(field)
+            .annotate(item_count=Count(field))
+            .annotate(percentage=(F('item_count') / self.TOTAL_ITEM_COUNT * 100))
+        )
 
-#         for sources in source_qs:
-#             percent = sources['source__count'] / total_count * 100
-#             sources['percent'] = percent
-#         composition['source'] = source_qs
-#         return Response(composition)
+    def get_color_percentages(self, obj):
+        return self.calculate_composition('color')
+
+    def get_brand_percentages(self, obj):
+        return self.calculate_composition('brand')
