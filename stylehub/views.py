@@ -2,7 +2,12 @@ from django.shortcuts import render, get_list_or_404
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from .models import CustomUser, ClosetItem, Outfit
-from .serializers import ClosetItemSerializer, OutfitSerializer, UserSerializer
+from .serializers import (
+    ClosetItemSerializer,
+    OutfitSerializer,
+    UserSerializer,
+    ClosetCompositionSerializer,
+)
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -95,15 +100,7 @@ class FavoriteOutfitsList(generics.ListAPIView):
 
 
 class ClosetComposition(APIView):
-    def calculate_composition(self):
-        total_count = ClosetItem.objects.count()
-        results = (
-            ClosetItem.objects.values("color")
-            .annotate(colors=Count("color"))
-            .annotate(percentage=(F("colors") * 100.0 / total_count))
-        )
-        return results
-
     def get(self, request, format=None):
-        composition = self.calculate_composition()
-        return Response(composition)
+        queryset = ClosetItem.objects.all()
+        serializer = ClosetCompositionSerializer(queryset)
+        return Response(serializer.data, status=status.HTTP_200_OK)
