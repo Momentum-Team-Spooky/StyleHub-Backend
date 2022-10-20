@@ -7,6 +7,13 @@ from django.conf import settings
 urlpatterns = [
     path('', views.api_root),
     path('mycloset/', views.MyClosetList.as_view(), name='my-closet-items'),
+    path('mycloset-tops/', views.MyClosetListTops.as_view(), name='my-closet-tops'),
+    path('mycloset-bottoms/', views.MyClosetListBottoms.as_view(),
+         name='my-closet-bottoms'),
+    path('mycloset-outerwear/', views.MyClosetListOuterwear.as_view(),
+         name='my-closet-outerwear'),
+    path('mycloset-shoes/', views.MyClosetListShoes.as_view(),
+         name='my-closet-shoes'),
     path('closet-item/<int:pk>/', views.ItemDetail.as_view(), name='item-detail'),
     path('myoutfits/', views.MyOutfitList.as_view(), name='my-outfits'),
     path('outfit/<int:pk>/', views.OutfitDetail.as_view(), name='outfit'),

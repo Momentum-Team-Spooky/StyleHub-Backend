@@ -36,6 +36,55 @@ class MyClosetList(generics.ListCreateAPIView):
         return queryset
 
 
+class MyClosetListTops(generics.ListCreateAPIView):
+    serializer_class = ClosetItemSerializer
+    permission_classes = [IsAuthenticated, IsOwningUser]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = self.request.user.closet_items.filter(category='top')
+        return queryset
+
+
+class MyClosetListBottoms(generics.ListCreateAPIView):
+    serializer_class = ClosetItemSerializer
+    permission_classes = [IsAuthenticated, IsOwningUser]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        queryset = self.request.user.closet_items.filter(category='bottom')
+        return queryset
+
+
+class MyClosetListOuterwear(generics.ListCreateAPIView):
+    serializer_class = ClosetItemSerializer
+    permission_classes = [IsAuthenticated, IsOwningUser]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        queryset = self.request.user.closet_items.filter(category='outerwear')
+        return queryset
+
+
+class MyClosetListShoes(generics.ListCreateAPIView):
+    serializer_class = ClosetItemSerializer
+    permission_classes = [IsAuthenticated, IsOwningUser]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        queryset = self.request.user.closet_items.filter(category='shoes')
+        return queryset
+
+
 class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ClosetItem.objects.all()
     serializer_class = ClosetItemSerializer
