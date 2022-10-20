@@ -155,33 +155,36 @@ No body returned for response
 
 ```
 
+---
+
 #### Get All Closet Items for One User - User Authentication **Required**
 
 ```http
 GET - https://stylehub.herokuapp.com/mycloset/
 ```
 
-| Body          | Type     | Description                             |
-| :------------ | :------- | :-------------------------------------- |
-| `id`          | `int`    | The closet item pk                      |
-| `item_choice` | `string` | Sub-category choice of closet item type |
-| `size`        | `string` | Size for closet item                    |
-| `color`       | `string` | Color choice of closet item             |
-| `material`    | `string` | Material input of closet item           |
-| `brand`       | `string` | Input of closet item brand              |
-| `source`      | `string` | Sub-category closet item choice         |
-| `tag`         | `string` | Tags (need to be separated by ,)        |
-| `item_image`  | `string` | Url to image                            |
-| `added_at`    | `string` | Date added                              |
-| `user_id`     | `int`    | User pk who created item pk             |
-| `user`        | `int`    | Date added                              |
+| Body          | Type     | Description                                        |
+| :------------ | :------- | :------------------------------------------------- |
+| `id`          | `int`    | The closet item pk                                 |
+| `category`    | `string` | Main Category Choice top, bottom, outerwear, shoes |
+| `subcategory` | `string` | Sub Catergory Choice for Clothing Item             |
+| `size`        | `string` | Size for closet item                               |
+| `color`       | `string` | Color choice of closet item                        |
+| `material`    | `string` | Material input of closet item                      |
+| `brand`       | `string` | Input of closet item brand                         |
+| `source`      | `string` | Sub-category closet item choice                    |
+| `tag`         | `string` | Tags (need to be separated by ,)                   |
+| `item_image`  | `string` | Url to image                                       |
+| `added_at`    | `string` | Date added                                         |
+| `user_id`     | `int`    | User pk who created item pk                        |
+| `user`        | `int`    | Date added                                         |
 
 Request Sample:
 
 ```
 GET /mycloset/
 Content-Type: json
-Authorization: N/A
+Authorization: Required
 Host: stylehub.herokuapp.com
 
 {
@@ -195,7 +198,8 @@ Response Example (200 OK)
 [
 	{
 		"id": 1,
-		"item_choice": "item choice",
+		"category": "top",
+		"subcategory": "dress",
 		"size": "size input",
 		"color": "color choice",
 		"material": "material input",
@@ -221,16 +225,331 @@ Response Example (200 OK)
 POST - https://stylehub.herokuapp.com/mycloset/
 ```
 
-| Body          | Type     | Description                             |
-| :------------ | :------- | :-------------------------------------- |
-| `item_choice` | `string` | Sub-category choice of closet item type |
-| `size`        | `string` | Size for closet item                    |
-| `color`       | `string` | Color choice of closet item             |
-| `material`    | `string` | Material input of closet item           |
-| `brand`       | `string` | Input of closet item brand              |
-| `source`      | `string` | Sub-category closet item choice         |
-| `tag`         | `string` | Tags (need to be separated by ,)        |
-| `item_image`  | `string` | Url to image                            |
+| Body          | Type     | Description                                        |
+| :------------ | :------- | :------------------------------------------------- |
+| `id`          | `int`    | The closet item pk                                 |
+| `category`    | `string` | Main Category Choice top, bottom, outerwear, shoes |
+| `subcategory` | `string` | Sub Catergory Choice for Clothing Item             |
+| `size`        | `string` | Size for closet item                               |
+| `color`       | `string` | Color choice of closet item                        |
+| `material`    | `string` | Material input of closet item                      |
+| `brand`       | `string` | Input of closet item brand                         |
+| `source`      | `string` | Sub-category closet item choice                    |
+| `tag`         | `string` | Tags (need to be separated by ,)                   |
+| `item_image`  | `string` | Url to image                                       |
+| `added_at`    | `string` | Date added                                         |
+| `user_id`     | `int`    | User pk who created item pk                        |
+| `user`        | `int`    | Date added                                         |
+
+Request Sample:
+
+```
+POST /mycloset/
+Content-Type: multipart
+Authorization: Required
+Host: stylehub.herokuapp.com
+
+| Name          | Value (Choices Given or User Input)                |
+| :------------ | :--------------------------------------------------|
+| `category`    | `top`, `bottom`, `outerwear`, `shoes` |
+| `subcategory` | `button down`, `dress`, `shirt`, `sweater`, `t-shirt`, `pants`, `shorts`, `skirt`, `cardigan`, `coat`, `jacket`, `vest`, `boots`, `flats`, `heels`, `sandals`, `slippers`, `sneakers`         |
+| `size`        | `user input`                    |
+| `color`       | `white`, `green`, `yellow`, `orange`, `red`, `pink`, `purple`, `turqoise`, `blue`, `brown`, `black`, `grey`, `multi`      |
+| `source`      | `brand store`, `department store`, `thrift shop`, `resale/consignment shop`, `friend`, `other`                         |
+| `brand`       | `user input for brand`                             |
+| `material`    | `user input for material`                          |
+| `tag`         | `["tag", "tag", "another tag"]`                    |
+| `item_image`  | File Url to image                                  |
+```
+
+Response Example (201 Created)
+
+```
+[
+	{
+		"id": 5,
+		"category": "shoes",
+		"subcategory": "heels",
+		"size": "8",
+		"color": "green",
+		"material": "leather",
+		"brand": "Simmi",
+		"source": "friend",
+		"tag": [
+			"going out",
+			"fun"
+		],
+		"item_image": "https://stylehub-s3-images.s3.amazonaws.com/closet_items/Green_Simmi_Shoes.jpeg",
+		"added_at": "2022-10-20",
+		"user_id": 1,
+		"user": "admin"
+	}
+]
+```
+
+---
+
+#### Get One Closet Item for One User - User Authentication **Required**
+
+```http
+GET - https://stylehub.herokuapp.com/closet-item/{closet-item-pk}/
+```
+
+| Body          | Type     | Description                                        |
+| :------------ | :------- | :------------------------------------------------- |
+| `id`          | `int`    | The closet item pk                                 |
+| `category`    | `string` | Main Category Choice top, bottom, outerwear, shoes |
+| `subcategory` | `string` | Sub Catergory Choice for Clothing Item             |
+| `size`        | `string` | Size for closet item                               |
+| `color`       | `string` | Color choice of closet item                        |
+| `material`    | `string` | Material input of closet item                      |
+| `brand`       | `string` | Input of closet item brand                         |
+| `source`      | `string` | Sub-category closet item choice                    |
+| `tag`         | `string` | Tags (need to be separated by ,)                   |
+| `item_image`  | `string` | Url to image                                       |
+| `added_at`    | `string` | Date added                                         |
+| `user_id`     | `int`    | User pk who created item pk                        |
+| `user`        | `int`    | Date added                                         |
+
+Request Sample:
+
+```
+GET /closet-item/{closet-item-pk}/
+Content-Type: json
+Authorization: Required
+Host: stylehub.herokuapp.com
+
+{
+    ""
+}
+```
+
+Response Example (200 OK)
+
+```
+[
+	{
+		"id": 1,
+		"category": "top",
+		"subcategory": "shirt",
+		"size": "Medium",
+		"color": "white",
+		"material": "Cotton",
+		"brand": "Bape",
+		"source": "brand_store",
+		"tag": [
+			"Casual",
+			"Fun"
+		],
+		"item_image": "url to image",
+		"added_at": "2022-10-19",
+		"user_id": 1,
+		"user": "admin"
+	}
+]
+```
+
+---
+
+#### Delete a Clothing Item - User Authentication **Required**
+
+```http
+DELETE - https://stylehub.herokuapp.com/closet-item/{closet-item-pk}/
+```
+
+| Body | Type | Description |
+| :--- | :--- | :---------- |
+| ""   | ""   | ""          |
+
+Request Sample:
+
+```
+DELETE /closet-item/{closet-item-pk}/
+Content-Type: json
+Authorization: Required
+Host: stylehub.herokuapp.com
+
+{
+	""
+}
+```
+
+Response Example (204 No Content)
+
+```
+{
+	"No body returned for response"
+}
+```
+
+---
+
+#### Edit One Closet Item for One User - User Authentication **Required**
+
+```http
+PATCH - https://stylehub.herokuapp.com/closet-item/{closet-item-pk}/
+```
+
+| Body          | Type     | Description                                        |
+| :------------ | :------- | :------------------------------------------------- |
+| `id`          | `int`    | The outfit item pk                                 |
+| `closet_item` | `string` | Main Category Choice top, bottom, outerwear, shoes |
+| `subcategory` | `string` | Sub Catergory Choice for Clothing Item             |
+| `size`        | `string` | Size for closet item                               |
+| `color`       | `string` | Color choice of closet item                        |
+| `material`    | `string` | Material input of closet item                      |
+| `brand`       | `string` | Input of closet item brand                         |
+| `source`      | `string` | Sub-category closet item choice                    |
+| `tag`         | `string` | Tags (need to be separated by ,)                   |
+| `item_image`  | `string` | Url to image                                       |
+| `added_at`    | `string` | Date added                                         |
+| `user_id`     | `int`    | User pk who created item pk                        |
+| `user`        | `int`    | User who created item                              |
+
+Request Sample:
+
+```
+PATCH /closet-item/{closet-item-pk}/
+Content-Type: json
+Authorization: Required
+Host: stylehub.herokuapp.com
+
+{
+    "size": "Large"
+}
+```
+
+Response Example (200 OK)
+
+```
+[
+	{
+		"id": 1,
+		"category": "top",
+		"subcategory": "shirt",
+		"size": "Large",
+		"color": "white",
+		"material": "Cotton",
+		"brand": "Bape",
+		"source": "brand_store",
+		"tag": [
+			"Casual",
+			"Fun"
+		],
+		"item_image": "url to image",
+		"added_at": "2022-10-19",
+		"user_id": 1,
+		"user": "admin"
+	}
+]
+```
+
+---
+
+#### Get All Outfits for One User - User Authentication **Required**
+
+```http
+GET - https://stylehub.herokuapp.com/myoutfits/
+```
+
+| Body          | Type      | Description                              |
+| :------------ | :-------- | :--------------------------------------- |
+| `id`          | `int`     | The closet item pk                       |
+| `title`       | `string`  | Name of Outfit                           |
+| `tag`         | `string`  | Tags (need to be separated by ,)         |
+| `outfit_date` | `string`  | Date of when you want to wear outfit     |
+| `draft`       | `boolean` | True or False if the outfit is a draft   |
+| `favorite`    | `boolean` | True or False if the outfit is favorited |
+| `user`        | `int`     | User who uploaded outfit                 |
+
+Request Sample:
+
+```
+GET /mycloset/
+Content-Type: json
+Authorization: N/A
+Host: stylehub.herokuapp.com
+
+{
+    ""
+}
+```
+
+Response Example (200 OK)
+
+```
+[
+	{
+		"id": 1,
+		"user": "admin",
+		"closet_item": [
+			{
+				"id": 2,
+				"category": "top",
+				"subcategory": "shirt",
+				"size": "Medium",
+				"color": "white",
+				"material": "Cotton",
+				"brand": "Bape",
+				"source": "brand_store",
+				"tag": [
+					"Funny",
+					"Cool"
+				],
+				"item_image": "http://127.0.0.1:8000/media/closet_items/Bape_T-Shirt_qWImkPH.jpeg",
+				"added_at": "2022-10-19",
+				"user_id": 1,
+				"user": "admin"
+			},
+			{
+				"id": 3,
+				"category": "bottom",
+				"subcategory": "pants",
+				"size": "33 x 32",
+				"color": "blue",
+				"material": "Cotton",
+				"brand": "Unknown",
+				"source": "brand_store",
+				"tag": [
+					"Casual",
+					"Torn"
+				],
+				"item_image": "http://127.0.0.1:8000/media/closet_items/Blue_Distressed_Jeans.jpeg",
+				"added_at": "2022-10-20",
+				"user_id": 1,
+				"user": "admin"
+			},
+			{
+				"id": 4,
+				"category": "shoes",
+				"subcategory": "sneakers",
+				"size": "8",
+				"color": "turqoise",
+				"material": "Leather",
+				"brand": "Nike",
+				"source": "brand_store",
+				"tag": [
+					"Fire",
+					"Tiffany Blue"
+				],
+				"item_image": "http://127.0.0.1:8000/media/closet_items/Nike_Tiffany_Colored_Shoes.jpeg",
+				"added_at": "2022-10-20",
+				"user_id": 1,
+				"user": "admin"
+			}
+		],
+		"title": "Sunday Funday",
+		"tag": [
+			"Casual",
+			"Cool",
+			"Simple"
+		],
+		"outfit_date": "2022-10-20",
+		"draft": true,
+		"favorite": false
+	}
+]
+```
 
 ---
 
