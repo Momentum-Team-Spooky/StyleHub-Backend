@@ -16,10 +16,4 @@ urlpatterns = [
          name='favorite-outfits'),
     path('closet-composition/', views.ClosetComposition.as_view(),
          name='closet-composition'),
-    # path('source-composition/', views.SourceComposition.as_view(),
-    #      name='source-composition'),
-    # path('brand-composition/', views.BrandComposition.as_view(),
-    #      name='brand-composition'),
-    # path('tag-composition/', views.TagComposition.as_view(),
-    #      name='tag-composition'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

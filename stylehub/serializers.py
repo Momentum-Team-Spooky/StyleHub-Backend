@@ -48,8 +48,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ClosetCompositionSerializer(serializers.Serializer):
+    tag = serializers.SlugRelatedField(slug_field="tag__name", read_only=True)
     color_percentages = serializers.SerializerMethodField()
     brand_percentages = serializers.SerializerMethodField()
+    source_percentages = serializers.SerializerMethodField()
+    category_percentages = serializers.SerializerMethodField()
+    tag_percentages = serializers.SerializerMethodField()
     total_closet_items = serializers.SerializerMethodField()
     TOTAL_ITEM_COUNT = ClosetItem.objects.count()
 
@@ -58,6 +62,9 @@ class ClosetCompositionSerializer(serializers.Serializer):
             'total_closet_items',
             'color_percentages',
             'brand_percentages',
+            'source_percentages',
+            'tag_percentages',
+            'category_percentages',
         )
 
     def get_total_closet_items(self, obj):
@@ -67,11 +74,21 @@ class ClosetCompositionSerializer(serializers.Serializer):
         results = (
             ClosetItem.objects.values(field)
             .annotate(item_count=Count(field))
-            .annotate(percentage=(F('item_count') / self.TOTAL_ITEM_COUNT * 100))
+            .annotate(percentage=(F('item_count') * 100 / self.TOTAL_ITEM_COUNT)).order_by('-percentage')[:10]
         )
+        return results
 
     def get_color_percentages(self, obj):
         return self.calculate_composition('color')
 
     def get_brand_percentages(self, obj):
         return self.calculate_composition('brand')
+
+    def get_source_percentages(self, obj):
+        return self.calculate_composition('source')
+
+    def get_category_percentages(self, obj):
+        return self.calculate_composition('category')
+
+    def get_tag_percentages(self, obj):
+        return self.calculate_composition('tag__name')
