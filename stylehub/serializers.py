@@ -42,6 +42,15 @@ class OutfitSerializer(TaggitSerializer, serializers.ModelSerializer):
                   'tag', 'outfit_date', 'draft', 'favorite')
 
 
+class OutfitEditSerializer(TaggitSerializer, serializers.ModelSerializer):
+    tag = TagListSerializerField()
+    user = serializers.SlugRelatedField(slug_field="username", read_only=True)
+
+    class Meta:
+        model = Outfit
+        fields = ('__all__')
+
+
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
