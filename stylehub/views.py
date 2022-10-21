@@ -27,6 +27,8 @@ def api_root(request, format=None):
 class MyClosetList(generics.ListCreateAPIView):
     serializer_class = ClosetItemSerializer
     permission_classes = [IsAuthenticated, IsOwningUser]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['category', 'subcategory', 'size', 'color', 'material', 'source', 'brand', 'tag__name']
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

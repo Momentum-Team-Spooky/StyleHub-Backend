@@ -219,6 +219,92 @@ Response Example (200 OK)
 
 ---
 
+#### Search All Closet Items- User Authentication **Required**
+
+```http
+GET - https://stylehub.herokuapp.com/mycloset/?search={""}
+```
+
+| Body | Type | Description |
+| :--- | :--- | :---------- |
+| `""` | `""` | ""          |
+
+Request Sample:
+
+```
+GET /mycloset/?search=fun
+Content-Type: json
+Authorization: Required
+Host: stylehub.herokuapp.com
+
+{
+    ""
+}
+```
+
+Response Example (200 OK)
+
+```
+	[
+	{
+		"id": 1,
+		"category": "top",
+		"subcategory": "shirt",
+		"size": "Large",
+		"color": "white",
+		"material": "Cotton",
+		"brand": "Bape",
+		"source": "brand_store",
+		"tag": [
+			"Casual",
+			"Fun"
+		],
+		"item_image": "http://127.0.0.1:8000/media/closet_items/Bape_T-Shirt.jpeg",
+		"added_at": "2022-10-20",
+		"user_id": 1,
+		"user": "admin"
+	},
+	{
+		"id": 2,
+		"category": "top",
+		"subcategory": "shirt",
+		"size": "Medium",
+		"color": "white",
+		"material": "Cotton",
+		"brand": "Bape",
+		"source": "brand_store",
+		"tag": [
+			"Funny",
+			"Cool"
+		],
+		"item_image": "http://127.0.0.1:8000/media/closet_items/Bape_T-Shirt_qWImkPH.jpeg",
+		"added_at": "2022-10-19",
+		"user_id": 1,
+		"user": "admin"
+	},
+	{
+		"id": 5,
+		"category": "shoes",
+		"subcategory": "heels",
+		"size": "8",
+		"color": "green",
+		"material": "leather",
+		"brand": "SImmi",
+		"source": "friend",
+		"tag": [
+			"going out",
+			"fun"
+		],
+		"item_image": "http://127.0.0.1:8000/media/closet_items/Green_Simmi_Shoes.jpeg",
+		"added_at": "2022-10-20",
+		"user_id": 1,
+		"user": "admin"
+	}
+]
+```
+
+---
+
 #### Post Closet-Item - User Authentication **Required**
 
 ```http
@@ -248,19 +334,19 @@ POST /mycloset/
 Content-Type: multipart
 Authorization: Required
 Host: stylehub.herokuapp.com
-
-| Name          | Value (Choices Given or User Input)                |
-| :------------ | :--------------------------------------------------|
-| `category`    | `top`, `bottom`, `outerwear`, `shoes` |
-| `subcategory` | `button down`, `dress`, `shirt`, `sweater`, `t-shirt`, `pants`, `shorts`, `skirt`, `cardigan`, `coat`, `jacket`, `vest`, `boots`, `flats`, `heels`, `sandals`, `slippers`, `sneakers`         |
-| `size`        | `user input`                    |
-| `color`       | `white`, `green`, `yellow`, `orange`, `red`, `pink`, `purple`, `turqoise`, `blue`, `brown`, `black`, `grey`, `multi`      |
-| `source`      | `brand store`, `department store`, `thrift shop`, `resale/consignment shop`, `friend`, `other`                         |
-| `brand`       | `user input for brand`                             |
-| `material`    | `user input for material`                          |
-| `tag`         | `["tag", "tag", "another tag"]`                    |
-| `item_image`  | File Url to image                                  |
 ```
+
+| Name          | Value (Choices Given or User Input)                                                                                                                                                   |
+| :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `category`    | `top`, `bottom`, `outerwear`, `shoes`                                                                                                                                                 |
+| `subcategory` | `button down`, `dress`, `shirt`, `sweater`, `t-shirt`, `pants`, `shorts`, `skirt`, `cardigan`, `coat`, `jacket`, `vest`, `boots`, `flats`, `heels`, `sandals`, `slippers`, `sneakers` |
+| `size`        | `user input`                                                                                                                                                                          |
+| `color`       | `white`, `green`, `yellow`, `orange`, `red`, `pink`, `purple`, `turqoise`, `blue`, `brown`, `black`, `grey`, `multi`                                                                  |
+| `source`      | `brand store`, `department store`, `thrift shop`, `resale/consignment shop`, `friend`, `other`                                                                                        |
+| `brand`       | `user input for brand`                                                                                                                                                                |
+| `material`    | `user input for material`                                                                                                                                                             |
+| `tag`         | `["tag", "tag", "another tag"]`                                                                                                                                                       |
+| `item_image`  | File Url to image                                                                                                                                                                     |
 
 Response Example (201 Created)
 
