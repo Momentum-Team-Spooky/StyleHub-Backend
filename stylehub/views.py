@@ -13,6 +13,7 @@ from rest_framework import filters
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
 from rest_framework.views import APIView
+from django.http import HttpResponseBadRequest, HttpResponse
 # Create your views here.
 
 
@@ -100,15 +101,32 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class MyOutfitList(generics.ListCreateAPIView):
-    serializer_class = OutfitSerializer
     permission_classes = [IsAuthenticated, IsOwningUser]
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
+    
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return OutfitSerializer
+        elif self.request.method == 'POST':
+            return OutfitEditSerializer
+    
+    
     def get_queryset(self):
-        queryset = self.request.user.outfits.all()
-        return queryset
+        draft = self.request.user.outfits.filter(draft=True)
+        queryset = self.request.user.outfits.filter(draft=False)
+        return draft | queryset
+
+    def perform_create(self, serializer):
+        
+        if self.request.data['draft'] == True:
+            if self.get_queryset().first().draft == True:
+                return HttpResponse('Draft already exists, can only have one draft at a time', status=401)
+            else:
+                serializer.save(user=self.request.user)
+        else:
+            serializer.save(user=self.request.user)
+
+
 
 
 class OutfitDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -121,7 +139,6 @@ class OutfitDetailEdit(generics.RetrieveUpdateDestroyAPIView):
     queryset = Outfit.objects.all()
     serializer_class = OutfitEditSerializer
     permission_classes = [IsAuthenticated, IsOwningUser]
-
 
 class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
@@ -142,6 +159,7 @@ class FavoriteOutfitsList(generics.ListAPIView):
     queryset = Outfit.objects.filter(favorite=True)
     serializer_class = OutfitSerializer
     permission_classes = [IsAuthenticated, IsOwningUser]
+
 
     def get_queryset(self):
         queryset = self.request.user.outfits.filter(favorite=True)

@@ -1,9 +1,11 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models import Q 
 from taggit.managers import TaggableManager
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField, ProcessedImageField
 from imagekit.processors import ResizeToFill, SmartResize, ResizeToFit
+from django.db.models.constraints import UniqueConstraint
 # Create your models here.
 
 
@@ -149,9 +151,12 @@ class Outfit(models.Model):
         blank=True,
         null=True)
     draft = models.BooleanField(
-        default=True)
+        default=False)
     favorite = models.BooleanField(
         default=False)
+
+    class Meta:
+        UniqueConstraint(fields=["user", "draft"], name="draft_per_user")
 
     def __str__(self):
         return f'{self.title} created by {self.user}'
