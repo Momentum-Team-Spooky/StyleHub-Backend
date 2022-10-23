@@ -44,7 +44,7 @@ class OutfitSerializer(TaggitSerializer, serializers.ModelSerializer):
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return OutfitSerializer
-        elif self.request.method == 'POST':
+        elif self.request.method == 'POST' | 'PATCH' | 'DELETE':
             return OutfitEditSerializer
 
 
