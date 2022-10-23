@@ -8,7 +8,7 @@ from django.db.models import Count, F, FloatField
 
 
 class ClosetItemSerializer(TaggitSerializer, serializers.ModelSerializer):
-    tag = TagListSerializerField()
+    tag = TagListSerializerField(read_only=True)
     user = serializers.SlugRelatedField(slug_field="username", read_only=True)
     user_id = serializers.SerializerMethodField()
     item_image = serializers.ImageField()
@@ -32,7 +32,7 @@ class ClosetItemSerializer(TaggitSerializer, serializers.ModelSerializer):
 
 
 class OutfitSerializer(TaggitSerializer, serializers.ModelSerializer):
-    tag = TagListSerializerField()
+    tag = TagListSerializerField(read_only=True)
     user = serializers.SlugRelatedField(slug_field="username", read_only=True)
     closet_item = ClosetItemSerializer(many=True, read_only=True)
 
@@ -43,12 +43,13 @@ class OutfitSerializer(TaggitSerializer, serializers.ModelSerializer):
 
 
 class OutfitEditSerializer(TaggitSerializer, serializers.ModelSerializer):
-    tag = TagListSerializerField()
+    tag = TagListSerializerField(read_only=True)
     user = serializers.SlugRelatedField(slug_field="username", read_only=True)
 
     class Meta:
         model = Outfit
-        fields = ('__all__')
+        fields = ('id', 'user', 'closet_item', 'title',
+                  'tag', 'outfit_date', 'draft', 'favorite')
 
 
 class UserSerializer(serializers.ModelSerializer):

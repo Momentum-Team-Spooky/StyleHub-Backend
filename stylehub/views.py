@@ -13,6 +13,9 @@ from rest_framework import filters
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
 from rest_framework.views import APIView
+from django.http import HttpResponseBadRequest, HttpResponse
+from django.db import IntegrityError
+from rest_framework.serializers import ValidationError
 # Create your views here.
 
 
@@ -28,7 +31,8 @@ class MyClosetList(generics.ListCreateAPIView):
     serializer_class = ClosetItemSerializer
     permission_classes = [IsAuthenticated, IsOwningUser]
     filter_backends = [filters.SearchFilter]
-    search_fields = ['category', 'subcategory', 'size', 'color', 'material', 'source', 'brand', 'tag__name']
+    search_fields = ['category', 'subcategory', 'size',
+                     'color', 'material', 'source', 'brand', 'tag__name']
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -100,6 +104,7 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class MyOutfitList(generics.ListCreateAPIView):
+    queryset = Outfit.objects.all()
     permission_classes = [IsAuthenticated, IsOwningUser]
 
     def get_serializer_class(self):
@@ -115,6 +120,21 @@ class MyOutfitList(generics.ListCreateAPIView):
         queryset = self.request.user.outfits.all()
         return queryset
 
+    # def get_queryset(self):
+    #     draft = self.request.user.outfits.filter(draft=True)
+    #     queryset = self.request.user.outfits.filter(draft=False)
+    #     return draft | queryset
+
+    # def perform_create(self, serializer):
+
+    #     if self.request.data['draft'] == True:
+    #         if self.get_queryset().first().draft == True:
+    #             return HttpResponse('Draft already exists, can only have one draft at a time', status=401)
+    #         else:
+    #             serializer.save(user=self.request.user)
+    #     else:
+    #         serializer.save(user=self.request.user)
+
 
 class OutfitDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Outfit.objects.all()
@@ -127,6 +147,12 @@ class OutfitDetail(generics.RetrieveUpdateDestroyAPIView):
             return OutfitEditSerializer
         elif self.request.method == 'DELETE':
             return OutfitEditSerializer
+
+
+# class OutfitCopy(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Outfit.objects.all()
+#     serializer_class = OutfitEditSerializer
+#     permission_classes = [IsAuthenticated, IsOwningUser]
 
 
 class OutfitDetailEdit(generics.RetrieveUpdateDestroyAPIView):
