@@ -13,6 +13,9 @@ from rest_framework import filters
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
 from rest_framework.views import APIView
+from django.http import HttpResponseBadRequest, HttpResponse
+from django.db import IntegrityError
+from rest_framework.serializers import ValidationError
 # Create your views here.
 
 
@@ -98,21 +101,48 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class MyOutfitList(generics.ListCreateAPIView):
-    serializer_class = OutfitSerializer
+    queryset = Outfit.objects.all()
     permission_classes = [IsAuthenticated, IsOwningUser]
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return OutfitSerializer
+        elif self.request.method == 'POST':
+            return OutfitEditSerializer
 
-    def get_queryset(self):
-        queryset = self.request.user.outfits.all()
-        return queryset
+    def perform_create(self, serializer):
+        try:
+            serializer.save()
+        except IntegrityError:
+            raise ValidationError({"Error - you already have a draft"})
+
+    # def get_queryset(self):
+    #     draft = self.request.user.outfits.filter(draft=True)
+    #     queryset = self.request.user.outfits.filter(draft=False)
+    #     return draft | queryset
+
+    # def perform_create(self, serializer):
+
+    #     if self.request.data['draft'] == True:
+    #         if self.get_queryset().all().draft == True:
+    #             return HttpResponse('Draft already exists, can only have one draft at a time', status=401)
+    #         else:
+    #             serializer.save(user=self.request.user)
+    #     else:
+    #         serializer.save(user=self.request.user)
 
 
 class OutfitDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Outfit.objects.all()
-    serializer_class = OutfitSerializer
     permission_classes = [IsAuthenticated, IsOwningUser]
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return OutfitSerializer
+        elif self.request.method == 'PATCH':
+            return OutfitEditSerializer
+        elif self.request.method == 'DELETE':
+            return OutfitEditSerializer
 
 
 class OutfitDetailEdit(generics.RetrieveUpdateDestroyAPIView):
