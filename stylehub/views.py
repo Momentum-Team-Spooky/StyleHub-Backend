@@ -116,8 +116,15 @@ class MyOutfitList(generics.ListCreateAPIView):
 
 class OutfitDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Outfit.objects.all()
-    serializer_class = OutfitSerializer
     permission_classes = [IsAuthenticated, IsOwningUser]
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return OutfitSerializer
+        elif self.request.method == 'PATCH':
+            return OutfitEditSerializer
+        elif self.request.method == 'DELETE':
+            return OutfitEditSerializer
 
 
 class OutfitDetailEdit(generics.RetrieveUpdateDestroyAPIView):
