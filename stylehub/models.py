@@ -108,7 +108,7 @@ class ClosetItem(models.Model):
         blank=True,
         null=True,
         default="unknown")
-    tag = TaggableManager(blank := True)
+    tag = TaggableManager(blank=True)
     item_image = ProcessedImageField(upload_to='closet_items',
                                      processors=[ResizeToFill(101, 134)],
                                      format='JPEG', options={'quality': 100},
