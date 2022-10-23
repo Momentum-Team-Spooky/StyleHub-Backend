@@ -98,8 +98,13 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class MyOutfitList(generics.ListCreateAPIView):
-    serializer_class = OutfitSerializer
     permission_classes = [IsAuthenticated, IsOwningUser]
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return OutfitSerializer
+        elif self.request.method == 'POST':
+            return OutfitEditSerializer
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
