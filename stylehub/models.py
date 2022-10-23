@@ -108,7 +108,7 @@ class ClosetItem(models.Model):
         blank=True,
         null=True,
         default="unknown")
-    tag = TaggableManager(blank=True)
+    tag = TaggableManager(blank := True)
     item_image = ProcessedImageField(upload_to='closet_items',
                                      processors=[ResizeToFill(101, 134)],
                                      format='JPEG', options={'quality': 100},
@@ -118,7 +118,7 @@ class ClosetItem(models.Model):
     # upload_to='closet_items/',
     # blank=True,
     # null=True)
-    #item_image_process = ImageSpecField(source='item_image', processors=[ResizeToFit(201.6, 268.8)], format='JPEG')
+    # item_image_process = ImageSpecField(source='item_image', processors=[ResizeToFit(201.6, 268.8)], format='JPEG')
     added_at = models.DateField(
         auto_now=True)
     user = models.ForeignKey(CustomUser,
@@ -141,7 +141,8 @@ class Outfit(models.Model):
         max_length=100,
         blank=True,
         null=True)
-    tag = TaggableManager(blank=True)
+    tag = TaggableManager(
+        blank=True)
     outfit_date = models.DateField(
         blank=True,
         null=True)
@@ -154,11 +155,19 @@ class Outfit(models.Model):
     favorite = models.BooleanField(
         default=False)
 
-    class Meta:
-        [
-            UniqueConstraint(fields=['draft'], condition=Q(
-                draft=True), name='one_draft_per_user')
-        ]
+    # def copy(self):
+    #     outfit = Outfit.objects.get(pk=self.pk)
+    #     closet_items = outfit.closet_item_set.all()
+
+    #     outfit.pk = None
+    #     outfit.save()
+
+    #     for closet_item in closet_items:
+    #         closet_item.pk = None
+    #         closet_item.outfit = outfit
+    #         closet_item.save()
+
+    #     return outfit.id
 
     def __str__(self):
         return f'{self.title} created by {self.user}'
