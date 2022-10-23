@@ -41,12 +41,6 @@ class OutfitSerializer(TaggitSerializer, serializers.ModelSerializer):
         fields = ('id', 'user', 'closet_item', 'title',
                   'tag', 'outfit_date', 'draft', 'favorite')
 
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return OutfitSerializer
-        elif self.request.method == 'POST' | 'PATCH' | 'DELETE':
-            return OutfitEditSerializer
-
 
 class OutfitEditSerializer(TaggitSerializer, serializers.ModelSerializer):
     tag = TagListSerializerField()
