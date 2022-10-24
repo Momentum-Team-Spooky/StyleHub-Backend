@@ -3,7 +3,7 @@ from django.db import models
 from taggit.managers import TaggableManager
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField, ProcessedImageField
-from imagekit.processors import ResizeToFill, SmartResize, ResizeToFit
+from imagekit.processors import ResizeToFill, SmartResize, ResizeToFit, Transpose
 from django.db.models import UniqueConstraint, Q
 # Create your models here.
 
@@ -110,15 +110,10 @@ class ClosetItem(models.Model):
         default="unknown")
     tag = TaggableManager(blank=True)
     item_image = ProcessedImageField(upload_to='closet_items',
-                                     processors=[ResizeToFill(101, 134)],
+                                     processors=[Transpose(), ResizeToFill(101, 134)],
                                      format='JPEG', options={'quality': 100},
                                      null=True, blank=True)
 
-    # item_image = models.ImageField(
-    # upload_to='closet_items/',
-    # blank=True,
-    # null=True)
-    # item_image_process = ImageSpecField(source='item_image', processors=[ResizeToFit(201.6, 268.8)], format='JPEG')
     added_at = models.DateField(
         auto_now=True)
     user = models.ForeignKey(CustomUser,
