@@ -119,6 +119,15 @@ class MyOutfitList(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = self.request.user.outfits.all()
         return queryset
+    
+    def create(self, request, *args, **kwargs):
+        try:
+            return super().create(request, *args, **kwargs)
+        except IntegrityError:
+            error_data = {
+                "error": "Unique constraint violation: A draft outfit has already been created."
+            }
+            return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
 
     # def get_queryset(self):
     #     draft = self.request.user.outfits.filter(draft=True)

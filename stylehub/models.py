@@ -146,9 +146,14 @@ class Outfit(models.Model):
         blank=True,
         null=True)
     draft = models.BooleanField(
-        default=True)
+        default=False)
     favorite = models.BooleanField(
         default=False)
+
+    class Meta:
+        UniqueConstraint(fields=['user', 'draft'], condition=Q(
+            draft=True), name='unique_draft')
+
 
     # def copy(self):
     #     outfit = Outfit.objects.get(pk=self.pk)
