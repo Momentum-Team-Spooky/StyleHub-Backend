@@ -120,6 +120,15 @@ class MyOutfitList(generics.ListCreateAPIView):
         queryset = self.request.user.outfits.all()
         return queryset
 
+
+class MyDraftOutfit(generics.ListCreateAPIView):
+    serializer_class = OutfitEditSerializer
+    queryset = Outfit.objects.filter(draft=True)
+    permission_classes = [IsAuthenticated, IsOwningUser]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
     # def get_queryset(self):
     #     draft = self.request.user.outfits.filter(draft=True)
     #     queryset = self.request.user.outfits.filter(draft=False)

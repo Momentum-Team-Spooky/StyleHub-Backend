@@ -16,6 +16,8 @@ urlpatterns = [
          name='my-closet-shoes'),
     path('closet-item/<int:pk>/', views.ItemDetail.as_view(), name='item-detail'),
     path('myoutfits/', views.MyOutfitList.as_view(), name='my-outfits'),
+    path('draft-outfit/',
+         views.MyDraftOutfit.as_view(), name='draft-outfit'),
     path('outfit/<int:pk>/', views.OutfitDetail.as_view(), name='outfit'),
     path('outfit-detail/<int:pk>/',
          views.OutfitDetailEdit.as_view(), name='outfit-detail'),
