@@ -110,7 +110,8 @@ class ClosetItem(models.Model):
         default="unknown")
     tag = TaggableManager(blank=True)
     item_image = ProcessedImageField(upload_to='closet_items',
-                                     processors=[Transpose(), ResizeToFill(101, 134)],
+                                     processors=[
+                                         Transpose(), ResizeToFill(101, 134)],
                                      format='JPEG', options={'quality': 100},
                                      null=True, blank=True)
 
@@ -151,8 +152,8 @@ class Outfit(models.Model):
         default=False)
 
     class Meta:
-        constraints = [UniqueConstraint(fields=['user', 'draft'], condition=Q(draft=True), name='unique_draft')]
-
+        constraints = [UniqueConstraint(
+            fields=['user', 'draft'], condition=Q(draft=True), name='unique_draft')]
 
     def __str__(self):
         return f'{self.title} created by {self.user}'

@@ -119,7 +119,7 @@ class MyOutfitList(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = self.request.user.outfits.all()
         return queryset
-    
+
     def create(self, request, *args, **kwargs):
         try:
             return super().create(request, *args, **kwargs)
@@ -128,6 +128,16 @@ class MyOutfitList(generics.ListCreateAPIView):
                 "error": "Unique constraint violation: A draft outfit has already been created."
             }
             return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MyDraftOutfit(generics.ListCreateAPIView):
+    queryset = Outfit.objects.all()
+    serializer_class = OutfitEditSerializer
+    permission_classes = [IsAuthenticated, IsOwningUser]
+
+    def get_queryset(self):
+        queryset = self.request.user.outfits.filter(draft=True)
+        return queryset
 
 
 class OutfitDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -175,8 +185,10 @@ class FavoriteOutfitsList(generics.ListAPIView):
 
 
 class ClosetComposition(APIView):
+    permission_classes = [IsAuthenticated, IsOwningUser]
+    queryset = ClosetItem.objects.all()
 
     def get(self, request, format=None):
-        queryset = ClosetItem.objects.all()
+        queryset = self.request.user.outfits.all()
         serializer = ClosetCompositionSerializer(queryset)
         return Response(serializer.data, status=status.HTTP_200_OK)
