@@ -80,13 +80,13 @@ class ClosetCompositionSerializer(serializers.Serializer):
         )
 
     def get_total_closet_items(self, obj):
-        return self.total_closet_items
+        return ClosetItem.objects.count()
 
     def calculate_composition(self, field):
         results = (
             ClosetItem.objects.values(field)
             .annotate(item_count=Count(field))
-            .annotate(percentage=(F('item_count') * 100 / self.total_closet_items)).order_by('-percentage')[:10]
+            .annotate(percentage=(F('item_count') * 100 / ClosetItem.objects.count())).order_by('-percentage')[:10]
         )
         return results
 
