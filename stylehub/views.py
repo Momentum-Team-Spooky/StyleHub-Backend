@@ -120,14 +120,14 @@ class MyOutfitList(generics.ListCreateAPIView):
         queryset = self.request.user.outfits.all()
         return queryset
 
-
-class MyDraftOutfit(generics.ListCreateAPIView):
-    serializer_class = OutfitEditSerializer
-    queryset = Outfit.objects.filter(draft=True)
-    permission_classes = [IsAuthenticated, IsOwningUser]
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def create(self, request, *args, **kwargs):
+        try:
+            return super().create(request, *args, **kwargs)
+        except IntegrityError:
+            error_data = {
+                "error": "Unique constraint violation: A draft outfit has already been created."
+            }
+            return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
 
 
 class OutfitDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -143,14 +143,14 @@ class OutfitDetail(generics.RetrieveUpdateDestroyAPIView):
             return OutfitEditSerializer
 
 
-# class OutfitCopy(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Outfit.objects.all()
-#     serializer_class = OutfitEditSerializer
-#     permission_classes = [IsAuthenticated, IsOwningUser]
-
-
 class OutfitDetailEdit(generics.RetrieveUpdateDestroyAPIView):
     queryset = Outfit.objects.all()
+    serializer_class = OutfitEditSerializer
+    permission_classes = [IsAuthenticated, IsOwningUser]
+
+
+class MyDraftOutfit(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Outfit.objects.filter(draft=True)
     serializer_class = OutfitEditSerializer
     permission_classes = [IsAuthenticated, IsOwningUser]
 
