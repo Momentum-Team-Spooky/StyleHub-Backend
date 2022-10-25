@@ -147,7 +147,7 @@ class Outfit(models.Model):
         blank=True,
         null=True)
     draft = models.BooleanField(
-        default=False)
+        default=True)
     favorite = models.BooleanField(
         default=False)
 
