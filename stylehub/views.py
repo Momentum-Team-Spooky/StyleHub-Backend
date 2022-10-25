@@ -104,7 +104,7 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class MyOutfitList(generics.ListCreateAPIView):
-    queryset = Outfit.objects.all()
+    # queryset = Outfit.objects.all()
     permission_classes = [IsAuthenticated, IsOwningUser]
 
     def get_serializer_class(self):
@@ -113,12 +113,19 @@ class MyOutfitList(generics.ListCreateAPIView):
         elif self.request.method == 'POST':
             return OutfitEditSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user)
 
     def get_queryset(self):
         queryset = self.request.user.outfits.all()
         return queryset
+
+    def perform_create(self, serializer):
+        try:
+            Outfit.objects.get_or_create(draft=True)
+            serializer.save(user=self.request.user)
+        except IntegrityError:
+            raise ValidationError({"error": "You already have a draft"})
 
     # def get_queryset(self):
     #     draft = self.request.user.outfits.filter(draft=True)
@@ -189,6 +196,7 @@ class FavoriteOutfitsList(generics.ListAPIView):
 class ClosetComposition(APIView):
 
     def get(self, request, format=None):
-        queryset = ClosetItem.objects.all()
+        queryset = self.request.user.closet_items.all()
+        # queryset = ClosetItem.objects.all()
         serializer = ClosetCompositionSerializer(queryset)
         return Response(serializer.data, status=status.HTTP_200_OK)

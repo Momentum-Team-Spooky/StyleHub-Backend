@@ -155,6 +155,10 @@ class Outfit(models.Model):
     favorite = models.BooleanField(
         default=False)
 
+    class Meta:
+        UniqueConstraint(fields=['user'], condition=Q(
+            draft=True), name='unique_draft')
+
     # def copy(self):
     #     outfit = Outfit.objects.get(pk=self.pk)
     #     closet_items = outfit.closet_item_set.all()
