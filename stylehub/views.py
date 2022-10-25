@@ -129,21 +129,6 @@ class MyDraftOutfit(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    # def get_queryset(self):
-    #     draft = self.request.user.outfits.filter(draft=True)
-    #     queryset = self.request.user.outfits.filter(draft=False)
-    #     return draft | queryset
-
-    # def perform_create(self, serializer):
-
-    #     if self.request.data['draft'] == True:
-    #         if self.get_queryset().first().draft == True:
-    #             return HttpResponse('Draft already exists, can only have one draft at a time', status=401)
-    #         else:
-    #             serializer.save(user=self.request.user)
-    #     else:
-    #         serializer.save(user=self.request.user)
-
 
 class OutfitDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Outfit.objects.all()
