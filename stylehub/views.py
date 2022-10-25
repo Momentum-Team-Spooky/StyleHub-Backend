@@ -130,6 +130,16 @@ class MyOutfitList(generics.ListCreateAPIView):
             return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
 
 
+class MyDraftOutfit(generics.ListCreateAPIView):
+    queryset = Outfit.objects.all()
+    serializer_class = OutfitEditSerializer
+    permission_classes = [IsAuthenticated, IsOwningUser]
+
+    def get_queryset(self):
+        queryset = self.request.user.outfits.filter(draft=True)
+        return queryset
+
+
 class OutfitDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Outfit.objects.all()
     permission_classes = [IsAuthenticated, IsOwningUser]
@@ -145,12 +155,6 @@ class OutfitDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class OutfitDetailEdit(generics.RetrieveUpdateDestroyAPIView):
     queryset = Outfit.objects.all()
-    serializer_class = OutfitEditSerializer
-    permission_classes = [IsAuthenticated, IsOwningUser]
-
-
-class MyDraftOutfit(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Outfit.objects.filter(draft=True)
     serializer_class = OutfitEditSerializer
     permission_classes = [IsAuthenticated, IsOwningUser]
 
@@ -181,8 +185,10 @@ class FavoriteOutfitsList(generics.ListAPIView):
 
 
 class ClosetComposition(APIView):
+    permission_classes = [IsAuthenticated, IsOwningUser]
+    queryset = ClosetItem.objects.all()
 
     def get(self, request, format=None):
-        queryset = ClosetItem.objects.all()
+        queryset = self.request.user.outfits.all()
         serializer = ClosetCompositionSerializer(queryset)
         return Response(serializer.data, status=status.HTTP_200_OK)
