@@ -27,7 +27,7 @@ class ClosetItemSerializer(TaggitSerializer, serializers.ModelSerializer):
             file = self.initial_data.get("file")
             instance.item_image.save(file.name, file, save=True)
             return instance
-        # this call to super is to make sure that update still works for other fields
+        
         return super().update(instance, validated_data)
 
 
@@ -67,7 +67,7 @@ class ClosetCompositionSerializer(serializers.Serializer):
     category_percentages = serializers.SerializerMethodField()
     tag_percentages = serializers.SerializerMethodField()
     total_closet_items = serializers.SerializerMethodField()
-    TOTAL_ITEM_COUNT = ClosetItem.objects.count()
+
 
     class Meta:
         fields = (
@@ -80,13 +80,13 @@ class ClosetCompositionSerializer(serializers.Serializer):
         )
 
     def get_total_closet_items(self, obj):
-        return self.TOTAL_ITEM_COUNT
+        return self.total_closet_items
 
     def calculate_composition(self, field):
         results = (
             ClosetItem.objects.values(field)
             .annotate(item_count=Count(field))
-            .annotate(percentage=(F('item_count') * 100 / self.TOTAL_ITEM_COUNT)).order_by('-percentage')[:10]
+            .annotate(percentage=(F('item_count') * 100 / self.total_closet_items)).order_by('-percentage')[:10]
         )
         return results
 

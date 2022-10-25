@@ -151,23 +151,8 @@ class Outfit(models.Model):
         default=False)
 
     class Meta:
-        UniqueConstraint(fields=['user', 'draft'], condition=Q(
-            draft=True), name='unique_draft')
+        constraints = [UniqueConstraint(fields=['user', 'draft'], condition=Q(draft=True), name='unique_draft')]
 
-
-    # def copy(self):
-    #     outfit = Outfit.objects.get(pk=self.pk)
-    #     closet_items = outfit.closet_item_set.all()
-
-    #     outfit.pk = None
-    #     outfit.save()
-
-    #     for closet_item in closet_items:
-    #         closet_item.pk = None
-    #         closet_item.outfit = outfit
-    #         closet_item.save()
-
-    #     return outfit.id
 
     def __str__(self):
         return f'{self.title} created by {self.user}'

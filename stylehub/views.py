@@ -129,21 +129,6 @@ class MyOutfitList(generics.ListCreateAPIView):
             }
             return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
 
-    # def get_queryset(self):
-    #     draft = self.request.user.outfits.filter(draft=True)
-    #     queryset = self.request.user.outfits.filter(draft=False)
-    #     return draft | queryset
-
-    # def perform_create(self, serializer):
-
-    #     if self.request.data['draft'] == True:
-    #         if self.get_queryset().first().draft == True:
-    #             return HttpResponse('Draft already exists, can only have one draft at a time', status=401)
-    #         else:
-    #             serializer.save(user=self.request.user)
-    #     else:
-    #         serializer.save(user=self.request.user)
-
 
 class OutfitDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Outfit.objects.all()
@@ -156,12 +141,6 @@ class OutfitDetail(generics.RetrieveUpdateDestroyAPIView):
             return OutfitEditSerializer
         elif self.request.method == 'DELETE':
             return OutfitEditSerializer
-
-
-# class OutfitCopy(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Outfit.objects.all()
-#     serializer_class = OutfitEditSerializer
-#     permission_classes = [IsAuthenticated, IsOwningUser]
 
 
 class OutfitDetailEdit(generics.RetrieveUpdateDestroyAPIView):
