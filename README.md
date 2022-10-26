@@ -1,6 +1,12 @@
-# StyleHub-Backend
+# StyleHub Backend README
 
 ## API Reference
+
+### Production Root URL
+
+```
+https://stylehub.herokuapp.com/
+```
 
 #### API Root
 
@@ -532,6 +538,90 @@ Response Example (200 OK)
 
 ---
 
+#### Get List of Closet Tops for One User - User Authentication **Required**
+
+```http
+GET - https://stylehub.herokuapp.com/mycloset-tops/
+```
+
+Request Sample:
+
+```
+GET /mycloset-tops/
+Content-Type: json
+Authorization: Required
+Host: stylehub.herokuapp.com
+
+{
+	""
+}
+```
+
+---
+
+#### Get List of Closet Bottoms for One User - User Authentication **Required**
+
+```http
+GET - https://stylehub.herokuapp.com/mycloset-bottoms/
+```
+
+Request Sample:
+
+```
+GET /mycloset-bottoms/
+Content-Type: json
+Authorization: Required
+Host: stylehub.herokuapp.com
+
+{
+	""
+}
+```
+
+---
+
+#### Get List of Closet Outerwear for One User - User Authentication **Required**
+
+```http
+GET - https://stylehub.herokuapp.com/mycloset-outerwear/
+```
+
+Request Sample:
+
+```
+GET /mycloset-outerwear/
+Content-Type: json
+Authorization: Required
+Host: stylehub.herokuapp.com
+
+{
+	""
+}
+```
+
+---
+
+#### Get List of Closet Shoes for One User - User Authentication **Required**
+
+```http
+GET - https://stylehub.herokuapp.com/mycloset-shoes/
+```
+
+Request Sample:
+
+```
+GET /mycloset-shoes/
+Content-Type: json
+Authorization: Required
+Host: stylehub.herokuapp.com
+
+{
+	""
+}
+```
+
+---
+
 #### Get All Outfits for One User - User Authentication **Required**
 
 ```http
@@ -582,7 +672,7 @@ Response Example (200 OK)
 					"Funny",
 					"Cool"
 				],
-				"item_image": "http://127.0.0.1:8000/media/closet_items/Bape_T-Shirt_qWImkPH.jpeg",
+				"item_image": "https://stylehub-s3-images.s3.amazonaws.com/media/closet_items/Bape_T-Shirt_qWImkPH.jpeg",
 				"added_at": "2022-10-19",
 				"user_id": 1,
 				"user": "admin"
@@ -600,7 +690,7 @@ Response Example (200 OK)
 					"Casual",
 					"Torn"
 				],
-				"item_image": "http://127.0.0.1:8000/media/closet_items/Blue_Distressed_Jeans.jpeg",
+				"item_image": "https://stylehub-s3-images.s3.amazonaws.com/media/closet_items/Blue_Distressed_Jeans.jpeg",
 				"added_at": "2022-10-20",
 				"user_id": 1,
 				"user": "admin"
@@ -618,7 +708,7 @@ Response Example (200 OK)
 					"Fire",
 					"Tiffany Blue"
 				],
-				"item_image": "http://127.0.0.1:8000/media/closet_items/Nike_Tiffany_Colored_Shoes.jpeg",
+				"item_image": "https://stylehub-s3-images.s3.amazonaws.com/media/closet_items/Nike_Tiffany_Colored_Shoes.jpeg",
 				"added_at": "2022-10-20",
 				"user_id": 1,
 				"user": "admin"
@@ -639,38 +729,25 @@ Response Example (200 OK)
 
 ---
 
-PRODUCTION URL: https://stylehub.herokuapp.com/
-
 Backend Repository for StyleHub Project
 
-| Method | URL              | Input       | Output                                       | Notes                                |
-| ------ | ---------------- | ----------- | -------------------------------------------- | ------------------------------------ |
-| GET    | mycloset/        | -           | list of all items in logged in user's closet |                                      |
-| POST   | mycloset/        | closet-item | add new item to closet                       | creates a new item                   |
-| GET    | closet-item/:id/ | -           | data for item with specified id              |                                      |
-| PATCH  | closet-item/:id/ | card data   | update item                                  | updates the item with specified id   |
-| DELETE | closet-item/:id/ | -           | -                                            | deletes item with specified id       |
-| GET    | myoutfits/       | -           | list of all outfits for logged in user       |                                      |
-| POST   | myoutfits/       | outfit      | create new outfit                            | creates a new item                   |
-| GET    | myoutfits/       | -           | lists all outfits for logged in user         |                                      |
-| GET    | outfit/:id/      | -           | data for item with specified id              |                                      |
-| PATCH  | outfit/:id/      | card data   | update item                                  | updates the outfit with specified id |
-| DELETE | outfit/:id/      | -           | -                                            | deletes outfit with specified id     |
-| GET    | myprofile/       | -           | profile for logged in user                   | not ready                            |
-| POST   | myprofile/       | profile     | input profile data informations              |                                      |
-| PATCH  | myprofile/       | -           | edit profile                                 |                                      |
-| GET    | profile/id/      |             | profile of another user                      |                                      |
-
---- ^^^ ACTIVE above ^^^ --- IN PROCESS below ---
-
-| GET | users/ | - | list of all users information | Admin/superuser only |
-| GET | closet-items/ | - | list of all closet-items | Admin/superuser only |
-| GET | outfits/ | - | list of all outfits | Admin/superuser only |
-| GET | user/:id/closet/ | - | list of items for user with specified id | Admin/superuser only |
-| GET | user/:id/outfits/ | - | list of outfits for user with specified id | Admin/superuser only |
-| GET/PATCH/DELETE | user/:id/closet-item/:id | - | item in closet of specified user | Admin/superuser only |
-| GET/PATCH/DELETE | user/:id/outfit/:id | - | outfit using of specified user | Admin/superuser only |
-
-```
-
-```
+| Method | URL                 | Input       | Output                                           | Notes                                |
+| ------ | ------------------- | ----------- | ------------------------------------------------ | ------------------------------------ |
+| GET    | mycloset/           | -           | list of all items in logged in user's closet     |                                      |
+| POST   | mycloset/           | closet-item | add new item to closet                           | creates a new item                   |
+| GET    | mycloset-tops/      | -           | list of all tops in logged in user's closet      |                                      |
+| GET    | mycloset-bottoms/   | -           | list of all bottoms in logged in users's closet  |                                      |
+| GET    | mycloset-outerwear/ | -           | list of all outerwear in logged in user's closet |                                      |
+| GET    | mycloset-shoes/     | -           | list of all shoes in logged in user's closet     |                                      |
+| GET    | draft-outfit/       | -           | get draft outfit                                 |                                      |
+| POST   | draft-outfit/       | closet-item | add new draft outfit to closet                   | creates a new draft outfit           |
+| GET    | closet-item/:id/    | -           | data for item with specified id                  |                                      |
+| PATCH  | closet-item/:id/    | card data   | update item                                      | updates the item with specified id   |
+| DELETE | closet-item/:id/    | -           | -                                                | deletes item with specified id       |
+| GET    | myoutfits/          | -           | list of all outfits for logged in user           |                                      |
+| POST   | myoutfits/          | outfit      | create new outfit                                | creates a new item                   |
+| GET    | myoutfits/          | -           | lists all outfits for logged in user             |                                      |
+| GET    | outfit/:id/         | -           | data for item with specified id                  |                                      |
+| PATCH  | outfit/:id/         | card data   | update item                                      | updates the outfit with specified id |
+| DELETE | outfit/:id/         | -           | -                                                | deletes outfit with specified id     |
+| GET    | closet-composition/ | -           | list all closet compostion stats for user        |                                      |
