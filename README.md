@@ -2,12 +2,6 @@
 
 ## API Reference
 
-### Production Root URL
-
-```
-https://stylehub.herokuapp.com/
-```
-
 #### API Root
 
 `https://stylehub.herokuapp.com/`
